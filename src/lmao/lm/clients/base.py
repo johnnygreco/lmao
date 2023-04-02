@@ -11,12 +11,8 @@ SUCCESS_STATUS_CODE = 200
 
 class LM(ABC):
     @abstractmethod
-    def chat(self, prompt: str, **kwargs) -> str:
-        ...
-
-    @abstractmethod
     def generate(self, prompt: str, **kwargs) -> str:
-        ...
+        pass
 
 
 class Client(LM, ABC):
