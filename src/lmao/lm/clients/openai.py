@@ -1,7 +1,7 @@
 import os
 from typing import NamedTuple, Optional
 
-from lmao.lm.clients.base import Client
+from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseGenerateResponse, Client
 from lmao.lm.schemas.openai import OpenAIGenerateSchema
 
 __all__ = ["OpenAI"]
@@ -22,8 +22,12 @@ class OpenAI(Client):
     def chat(self, prompt: str, **kwargs) -> str:
         return ""
 
-    def generate(self, prompt: str, **kwargs) -> str:
+    def generate(self, prompt: str, **kwargs) -> BaseGenerateResponse:
         status_code, response = self._post_request(
             "completions", OpenAIGenerateSchema(prompt=prompt, **kwargs).to_request_dict()
         )
-        return response["choices"][0]["text"]
+        return BaseGenerateResponse(
+            text=response["choices"][0]["text"] if status_code == SUCCESS_STATUS_CODE else None,
+            raw_response=response,
+            status_code=status_code,
+        )

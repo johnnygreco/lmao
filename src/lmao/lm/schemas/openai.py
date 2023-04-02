@@ -1,26 +1,11 @@
-from enum import Enum
+import re
 from typing import Dict, List, Optional, Union
 
-from pydantic import Extra, Field
+from pydantic import Extra, Field, validator
 
 from lmao.lm.schemas.base import API_DEFAULTS, BaseSchema
 
-__all__ = [
-    "OpenAIChatModels",
-    "OpenAIGenerateModels",
-    "OpenAIGenerateSchema",
-]
-
-
-class OpenAIChatModels(str, Enum):
-    GPT_4 = "gpt-4"
-    GPT_4_0314 = "gpt-4-0314"
-    GPT_3p5_TURBO = "gpt-3.5-turbo"
-    GPT_3p5_TURBO_0301 = "gpt-3.5-turbo-0301"
-
-
-class OpenAIGenerateModels(str, Enum):
-    TEXT_DAVINCI_003 = "text-davinci-003"
+__all__ = ["OpenAIGenerateSchema"]
 
 
 class OpenAIGenerateSchema(BaseSchema):
@@ -29,7 +14,7 @@ class OpenAIGenerateSchema(BaseSchema):
     class Config:
         extra = Extra.forbid
 
-    model: str = OpenAIGenerateModels.TEXT_DAVINCI_003
+    model: str = Field(default="text-davinci-003", description="Must be of the form `text-davinci-[model_version]`.")
     prompt: Optional[str] = Field(default=None)
     suffix: Optional[str] = Field(default=None)
     max_tokens: int = Field(default=API_DEFAULTS.generate_max_tokens, le=4096)
@@ -45,3 +30,9 @@ class OpenAIGenerateSchema(BaseSchema):
     best_of: int = Field(default=1)
     logit_bias: Optional[Dict[str, int]] = Field(default=None, ge=-100, le=100)
     user: Optional[str] = Field(default=None)
+
+    @validator("model", pre=True, always=True)
+    def validate_model(cls, v):
+        if not re.search(r"text-davinci-\d\d\d", v):
+            raise ValueError(f"{v} is not a valid model.")
+        return v

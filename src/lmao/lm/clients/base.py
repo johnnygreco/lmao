@@ -1,17 +1,31 @@
+import re
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-__all__ = ["Client", "SUCCESS_STATUS_CODE"]
+__all__ = ["BaseGenerateResponse", "Client", "SUCCESS_STATUS_CODE"]
 SUCCESS_STATUS_CODE = 200
+
+
+@dataclass
+class BaseGenerateResponse:
+    text: Optional[str]
+    raw_response: dict
+    status_code: int
+
+    def __repr__(self):
+        repr = "\n".join([f"{k}: {v}" for k, v in self.__dict__.items()])
+        repr = re.sub(r"^", " " * 4, repr, 0, re.M)
+        return f"{self.__class__.__name__}({{\n{repr}\n}})"
 
 
 class LM(ABC):
     @abstractmethod
-    def generate(self, prompt: str, **kwargs) -> str:
+    def generate(self, prompt: str, **kwargs) -> BaseGenerateResponse:
         pass
 
 
