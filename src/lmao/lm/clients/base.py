@@ -1,3 +1,4 @@
+import os
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -7,12 +8,12 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-__all__ = ["BaseGenerateResponse", "Client", "SUCCESS_STATUS_CODE"]
+__all__ = ["BaseClientResponse", "Client", "SUCCESS_STATUS_CODE"]
 SUCCESS_STATUS_CODE = 200
 
 
 @dataclass
-class BaseGenerateResponse:
+class BaseClientResponse:
     text: Optional[str]
     raw_response: dict
     status_code: int
@@ -25,12 +26,13 @@ class BaseGenerateResponse:
 
 class LM(ABC):
     @abstractmethod
-    def generate(self, prompt: str, **kwargs) -> BaseGenerateResponse:
+    def generate(self, prompt: str, **kwargs) -> BaseClientResponse:
         pass
 
 
 class Client(LM, ABC):
     base_url: str = "none"
+    api_env_name: str = "none"
 
     #  If the backoff_factor is 0.1, then sleep() will sleep for [0.0s, 0.2s, 0.4s, …] between retries.
     RETRY_BACKOFF_FACTOR: float = 0.1
@@ -38,9 +40,9 @@ class Client(LM, ABC):
 
     def __init__(self, api_key: Optional[str] = None, max_retries: int = 5):
         self.max_retries = max_retries
-        if api_key is None:
-            raise ValueError("You must provide an API key to initialize an LM Client.")
-        self.__api_key = api_key
+        self.__api_key = api_key or os.environ.get(self.api_env_name)
+        if self.__api_key is None:
+            raise ValueError("You must provide an API key or set api_env_name to initialize an LM Client.")
         if self.base_url == "none":
             raise ValueError("All Client subclasses must define a base URL attribute.")
 
