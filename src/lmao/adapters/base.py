@@ -17,6 +17,7 @@ class AdapterErrors(NamedTuple):
 class AdapterResponse:
     prediction: str
     llm_response: BaseClientResponse
+    success: bool
 
 
 class BaseAdapter(ABC):

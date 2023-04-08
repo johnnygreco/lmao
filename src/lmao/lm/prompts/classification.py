@@ -23,6 +23,8 @@ class ClassificationPrompter(Prompter):
         return f"Input: {input_text}\nCategory: {category}\n\n"
 
     def add_example(self, input_text: str, category: str):
+        if category not in self.categories:
+            raise ValueError(f"Category {category} is not in the list of categories.")
         self.examples.append(self.create_example(input_text, category))
 
     def create_prompt(self, input_text: str) -> str:
@@ -47,10 +49,3 @@ class SentimentAnalysisPrompter(ClassificationPrompter):
             examples=examples,
             template=template,
         )
-
-    @staticmethod
-    def create_example(input_text: str, sentiment: str) -> str:
-        return f"Input: {input_text}\nSentiment: {sentiment}\n\n"
-
-    def add_example(self, input_text: str, sentiment: str):
-        self.examples.append(self.create_example(input_text, sentiment))

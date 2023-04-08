@@ -11,32 +11,29 @@ class TextClassificationAdapter(BaseAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, categories: List[str], lowercase: bool = True, **kwargs):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
-        super().__init__(
-            lm=lm, lm_method_name=lm_method_name, prompter=ClassificationPrompter(categories=self.categories, **kwargs)
-        )
+        prompter = kwargs.pop("prompter")
+        prompter = prompter or ClassificationPrompter(categories=self.categories, **kwargs)
+        super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=prompter)
 
     def predict(self, text: str) -> AdapterResponse:
         response = getattr(self.lm, self.lm_method_name)(self.prompter.create_prompt(text))
+        success = True
         if response.status_code == SUCCESS_STATUS_CODE:
             prediction = response.text.strip().lower() if self.lowercase else response.text.strip()
+            prediction = prediction.replace(".", "")
             if prediction not in self.categories:
                 prediction = adapter_errors.PREDICTION_ERROR
+                success = False
         else:
             prediction = adapter_errors.CLIENT_ERROR
-        return AdapterResponse(prediction=prediction, llm_response=response)
+            success = False
+        return AdapterResponse(prediction=prediction, llm_response=response, success=success)
 
 
-class SentimentAnalysisAdapter(BaseAdapter):
+class SentimentAnalysisAdapter(TextClassificationAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, **kwargs):
-        self.categories = ["positive", "negative", "neutral"]
-        super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=SentimentAnalysisPrompter(**kwargs))
-
-    def predict(self, text: str) -> AdapterResponse:
-        response = getattr(self.lm, self.lm_method_name)(self.prompter.create_prompt(text))
-        if response.status_code == SUCCESS_STATUS_CODE:
-            prediction = response.text.strip().lower()
-            if prediction not in self.categories:
-                prediction = adapter_errors.PREDICTION_ERROR
-        else:
-            prediction = adapter_errors.CLIENT_ERROR
-        return AdapterResponse(prediction=prediction, llm_response=response)
+        categories = ["positive", "negative", "neutral"]
+        super().__init__(
+            lm=lm, lm_method_name=lm_method_name, categories=categories, prompter=SentimentAnalysisPrompter(**kwargs)
+        )
+        self.lowercase = True
