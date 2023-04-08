@@ -11,7 +11,7 @@ class TextClassificationAdapter(BaseAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, categories: List[str], lowercase: bool = True, **kwargs):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
-        prompter = kwargs.pop("prompter") or ClassificationPrompter(categories=self.categories, **kwargs)
+        prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories, **kwargs)
         super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=prompter)
 
     def predict(self, text: str) -> AdapterResponse:
