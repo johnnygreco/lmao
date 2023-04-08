@@ -5,10 +5,15 @@ from pydantic import Extra, Field, validator
 
 from lmao.lm.schemas.base import API_DEFAULTS, BaseSchema
 
-__all__ = ["OpenAIChatSchema", "OpenAIGenerateSchema"]
+__all__ = ["OpenAIChatSchema", "OpenAIGenerateSchema", "openai_model_regex"]
 
 
+model_versions = r"(?:3\.5-turbo|4)"
 date_label_pattern = r"(?:0[1-9]|1[012])(?:0[1-9]|[12][0-9]|3[01])$"
+openai_model_regex = dict(
+    chat=re.compile(rf"gpt-(?:{model_versions}(?:(?!-)\b|-{date_label_pattern}))"),
+    complete=re.compile(r"text-davinci-\d\d\d"),
+)
 
 
 class OpenAIChatSchema(BaseSchema):
@@ -29,8 +34,7 @@ class OpenAIChatSchema(BaseSchema):
 
     @validator("model", pre=True, always=True)
     def validate_model(cls, v):
-        versions = r"(?:3\.5-turbo|4)"
-        if not re.search(rf"gpt-(?:{versions}(?:(?!-)\b|-{date_label_pattern}))", v):
+        if not openai_model_regex["chat"].search(v):
             raise ValueError(f"{v} is an invalid model format.")
         return v
 
@@ -60,6 +64,6 @@ class OpenAIGenerateSchema(BaseSchema):
 
     @validator("model", pre=True, always=True)
     def validate_model(cls, v):
-        if not re.search(r"text-davinci-\d\d\d", v):
+        if not openai_model_regex["complete"].search(v):
             raise ValueError(f"{v} is an invalid model format.")
         return v

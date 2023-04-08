@@ -1,14 +1,15 @@
 import os
 import re
 from abc import ABC, abstractmethod
+from collections import deque
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import Deque, List, Optional, Tuple
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-__all__ = ["BaseClientResponse", "Client", "SUCCESS_STATUS_CODE"]
+__all__ = ["BaseClientResponse", "BaseClient", "ChatHistory", "SUCCESS_STATUS_CODE"]
 SUCCESS_STATUS_CODE = 200
 
 
@@ -24,13 +25,41 @@ class BaseClientResponse:
         return f"{self.__class__.__name__}({{\n{repr}\n}})"
 
 
+class ChatHistory(ABC):
+    def __init__(self, length: int = 10):
+        self.length = length
+        self._messages: Deque = deque(maxlen=length)
+
+    @abstractmethod
+    def append(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def check_message_format(self, message):
+        pass
+
+    def clear(self):
+        self._messages.clear()
+
+    def __iter__(self):
+        return iter(self._messages)
+
+    def __len__(self):
+        return len(self._messages)
+
+    def __repr__(self):
+        repr = "\n".join([str(m) for m in self._messages])
+        repr = "\n" + re.sub(r"^", " " * 4, repr, 0, re.M) + "\n" if len(self._messages) > 0 else ""
+        return f"{self.__class__.__name__}([{repr}])"
+
+
 class LM(ABC):
     @abstractmethod
-    def generate(self, prompt: str, **kwargs) -> BaseClientResponse:
+    def complete(self, prompt: str, **kwargs) -> BaseClientResponse:
         pass
 
 
-class Client(LM, ABC):
+class BaseClient(LM, ABC):
     base_url: str = "none"
     api_env_name: str = "none"
 
