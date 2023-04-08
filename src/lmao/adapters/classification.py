@@ -11,8 +11,7 @@ class TextClassificationAdapter(BaseAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, categories: List[str], lowercase: bool = True, **kwargs):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
-        prompter = kwargs.pop("prompter")
-        prompter = prompter or ClassificationPrompter(categories=self.categories, **kwargs)
+        prompter = kwargs.pop("prompter") or ClassificationPrompter(categories=self.categories, **kwargs)
         super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=prompter)
 
     def predict(self, text: str) -> AdapterResponse:
@@ -32,8 +31,10 @@ class TextClassificationAdapter(BaseAdapter):
 
 class SentimentAnalysisAdapter(TextClassificationAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, **kwargs):
-        categories = ["positive", "negative", "neutral"]
         super().__init__(
-            lm=lm, lm_method_name=lm_method_name, categories=categories, prompter=SentimentAnalysisPrompter(**kwargs)
+            lm=lm,
+            lm_method_name=lm_method_name,
+            categories=["positive", "negative", "neutral"],
+            lowercase=True,
+            prompter=SentimentAnalysisPrompter(**kwargs),
         )
-        self.lowercase = True
