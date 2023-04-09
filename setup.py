@@ -24,6 +24,7 @@ setup(
     version=__version__,
     description="LMAO: Language Model Adapters and Orchestrators",
     long_description=long_description,
+    author="Johnny Greco",
     packages=find_packages("src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
