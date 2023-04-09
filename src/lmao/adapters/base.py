@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import NamedTuple
 
-from lmao.lm.clients.base import BaseClient, BaseClientResponse
+from lmao.lm.clients.base import BaseClient, ClientResponse
 from lmao.lm.prompts.base import Prompter
 
 __all__ = ["adapter_errors", "TaskAdapter"]
@@ -16,7 +16,7 @@ class TaskAdapterErrors(NamedTuple):
 @dataclass
 class TaskAdapterResponse:
     prediction: str
-    llm_response: BaseClientResponse
+    llm_response: ClientResponse
     success: bool
 
 

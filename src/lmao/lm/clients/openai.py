@@ -1,6 +1,6 @@
 from typing import Literal, NamedTuple, Optional
 
-from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient, BaseClientResponse, ChatHistory
+from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
 from lmao.lm.schemas.openai import OpenAIChatSchema, OpenAIGenerateSchema
 
 __all__ = ["OpenAI"]
@@ -47,7 +47,7 @@ class OpenAI(BaseClient):
         role: Literal["user", "assistant"] = "user",
         system_message: str = DEFAULT_SYSTEM_MESSAGE,
         **kwargs,
-    ) -> BaseClientResponse:
+    ) -> ClientResponse:
         self.chat_history.append(role=role, content=message_content)
         messages = [{"role": "system", "content": system_message}] + list(self.chat_history)
         status_code, response = self._post_request(
@@ -56,17 +56,17 @@ class OpenAI(BaseClient):
         assistant_message = response["choices"][0]["message"]["content"] if status_code == SUCCESS_STATUS_CODE else None
         if assistant_message:
             self.chat_history.append(role="assistant", content=assistant_message)
-        return BaseClientResponse(
+        return ClientResponse(
             text=assistant_message,
             raw_response=response,
             status_code=status_code,
         )
 
-    def complete(self, prompt: str, **kwargs) -> BaseClientResponse:
+    def complete(self, prompt: str, **kwargs) -> ClientResponse:
         status_code, response = self._post_request(
             "completions", OpenAIGenerateSchema(prompt=prompt, **kwargs).to_request_dict()
         )
-        return BaseClientResponse(
+        return ClientResponse(
             text=response["choices"][0]["text"] if status_code == SUCCESS_STATUS_CODE else None,
             raw_response=response,
             status_code=status_code,

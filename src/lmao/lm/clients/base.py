@@ -9,12 +9,12 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-__all__ = ["BaseClientResponse", "BaseClient", "ChatHistory", "SUCCESS_STATUS_CODE"]
+__all__ = ["ClientResponse", "BaseClient", "ChatHistory", "SUCCESS_STATUS_CODE"]
 SUCCESS_STATUS_CODE = 200
 
 
 @dataclass
-class BaseClientResponse:
+class ClientResponse:
     text: Optional[str]
     raw_response: dict
     status_code: int
@@ -55,7 +55,7 @@ class ChatHistory(ABC):
 
 class LM(ABC):
     @abstractmethod
-    def complete(self, prompt: str, **kwargs) -> BaseClientResponse:
+    def complete(self, prompt: str, **kwargs) -> ClientResponse:
         pass
 
 
