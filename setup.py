@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "0.0.1-beta.2"
+__version__ = "0.0.1-beta.3"
 
 with open("README.md", "r") as fh:
     long_description = fh.read() or ""
@@ -20,7 +20,7 @@ extras_require["all"] = [req for req_list in extras_require.values() for req in 
 
 
 setup(
-    name="lmao",
+    name="lmao-nlp",
     version=__version__,
     description="LMAO: Language Model Adapters and Orchestrators",
     long_description=long_description,
