@@ -1,9 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "0.0.1-beta.3"
-
-with open("README.md", "r") as fh:
-    long_description = fh.read() or ""
+__version__ = "0.0.1-beta.4"
 
 with open("requirements.txt", "r") as f:
     install_requires = [line.replace("==", ">=") for line in f.read().splitlines() if line != "" if line[0] != "#"]
@@ -23,7 +20,6 @@ setup(
     name="lmao-nlp",
     version=__version__,
     description="LMAO: Language Model Adapters and Orchestrators",
-    long_description=long_description,
     author="Johnny Greco",
     packages=find_packages("src"),
     package_dir={"": "src"},
