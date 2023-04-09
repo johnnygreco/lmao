@@ -5,30 +5,30 @@ from typing import NamedTuple
 from lmao.lm.clients.base import BaseClient, BaseClientResponse
 from lmao.lm.prompts.base import Prompter
 
-__all__ = ["adapter_errors", "BaseAdapter"]
+__all__ = ["adapter_errors", "TaskAdapter"]
 
 
-class AdapterErrors(NamedTuple):
+class TaskAdapterErrors(NamedTuple):
     CLIENT_ERROR: str
     PREDICTION_ERROR: str
 
 
 @dataclass
-class AdapterResponse:
+class TaskAdapterResponse:
     prediction: str
     llm_response: BaseClientResponse
     success: bool
 
 
-class BaseAdapter(ABC):
+class TaskAdapter(ABC):
     def __init__(self, lm: BaseClient, lm_method_name: str, prompter: Prompter):
         self.lm = lm
         self.prompter = prompter
         self.lm_method_name = lm_method_name
 
     @abstractmethod
-    def predict(self, text: str) -> AdapterResponse:
+    def predict(self, text: str) -> TaskAdapterResponse:
         pass
 
 
-adapter_errors = AdapterErrors(CLIENT_ERROR="CLIENT ERROR", PREDICTION_ERROR="PREDICTION ERROR")
+adapter_errors = TaskAdapterErrors(CLIENT_ERROR="CLIENT ERROR", PREDICTION_ERROR="PREDICTION ERROR")

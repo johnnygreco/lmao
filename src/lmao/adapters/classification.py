@@ -1,20 +1,20 @@
 from typing import List
 
-from lmao.adapters.base import AdapterResponse, BaseAdapter, adapter_errors
+from lmao.adapters.base import TaskAdapter, TaskAdapterResponse, adapter_errors
 from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient
 from lmao.lm.prompts.classification import ClassificationPrompter, SentimentAnalysisPrompter
 
 __all__ = ["TextClassificationAdapter", "SentimentAnalysisAdapter"]
 
 
-class TextClassificationAdapter(BaseAdapter):
+class TextClassificationAdapter(TaskAdapter):
     def __init__(self, lm: BaseClient, lm_method_name: str, categories: List[str], lowercase: bool = True, **kwargs):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
         prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories, **kwargs)
         super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=prompter)
 
-    def predict(self, text: str, **kwargs) -> AdapterResponse:
+    def predict(self, text: str, **kwargs) -> TaskAdapterResponse:
         response = getattr(self.lm, self.lm_method_name)(self.prompter.create_prompt(text), **kwargs)
         success = True
         if response.status_code == SUCCESS_STATUS_CODE:
@@ -26,7 +26,7 @@ class TextClassificationAdapter(BaseAdapter):
         else:
             prediction = adapter_errors.CLIENT_ERROR
             success = False
-        return AdapterResponse(prediction=prediction, llm_response=response, success=success)
+        return TaskAdapterResponse(prediction=prediction, llm_response=response, success=success)
 
 
 class SentimentAnalysisAdapter(TextClassificationAdapter):
