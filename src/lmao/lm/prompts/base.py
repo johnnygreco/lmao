@@ -5,13 +5,13 @@ __all__ = ["default_templates", "Prompter"]
 
 default_templates = {
     "classification": (
-        "Classify the following input text into one of the following {num_categories} categories: [{categories}]. "
+        "Classify the input text into one of the following {num_categories} categories: [{categories}]. "
         "Respond with the answer only, without punctuation.\n\n"
         "{examples}"
         "Input: {input_text}\nCategory:"
     ),
     "sentiment_analysis": (
-        "Classify the sentiment of the following input one of the following "
+        "Classify the sentiment of the input text into one of the following "
         "{num_categories} categories: [{categories}]. Respond with the answer only, without punctuation.\n\n"
         "{examples}"
         "Input: {input_text}\nSentiment:"
