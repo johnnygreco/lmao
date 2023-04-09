@@ -11,8 +11,8 @@ default_templates = {
         "Input: {input_text}\nCategory:"
     ),
     "sentiment_analysis": (
-        "Classify the sentiment of the following input text as positive, negative, or neutral. "
-        "Respond with the answer only, without punctuation.\n\n"
+        "Classify the sentiment of the following input one of the following "
+        "{num_categories} categories: [{categories}]. Respond with the answer only, without punctuation.\n\n"
         "{examples}"
         "Input: {input_text}\nSentiment:"
     ),

@@ -43,9 +43,10 @@ class SentimentAnalysisPrompter(ClassificationPrompter):
         self,
         examples: Optional[List[str]] = None,
         template: Optional[str] = None,
+        include_neutral: bool = True,
     ):
         super().__init__(
-            categories=["positive", "negative", "neutral"],
+            categories=["positive", "negative"] + (["neutral"] if include_neutral else []),
             examples=examples,
             template=template,
         )

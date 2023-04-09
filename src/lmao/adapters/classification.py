@@ -14,8 +14,8 @@ class TextClassificationAdapter(BaseAdapter):
         prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories, **kwargs)
         super().__init__(lm=lm, lm_method_name=lm_method_name, prompter=prompter)
 
-    def predict(self, text: str) -> AdapterResponse:
-        response = getattr(self.lm, self.lm_method_name)(self.prompter.create_prompt(text))
+    def predict(self, text: str, **kwargs) -> AdapterResponse:
+        response = getattr(self.lm, self.lm_method_name)(self.prompter.create_prompt(text), **kwargs)
         success = True
         if response.status_code == SUCCESS_STATUS_CODE:
             prediction = response.text.strip().lower() if self.lowercase else response.text.strip()
@@ -30,11 +30,11 @@ class TextClassificationAdapter(BaseAdapter):
 
 
 class SentimentAnalysisAdapter(TextClassificationAdapter):
-    def __init__(self, lm: BaseClient, lm_method_name: str, **kwargs):
+    def __init__(self, lm: BaseClient, lm_method_name: str, include_neutral: bool = True, **kwargs):
         super().__init__(
             lm=lm,
             lm_method_name=lm_method_name,
-            categories=["positive", "negative", "neutral"],
+            categories=["positive", "negative"] + (["neutral"] if include_neutral else []),
             lowercase=True,
-            prompter=SentimentAnalysisPrompter(**kwargs),
+            prompter=SentimentAnalysisPrompter(include_neutral=include_neutral, **kwargs),
         )
