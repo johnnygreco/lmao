@@ -40,13 +40,12 @@ class ClientResponse:
 
 
 class ChatHistory(ABC):
+    human_role: str = "human"
+    assistant_role: str = "assistant"
+
     def __init__(self, max_length: int = 10):
         self.max_length = max_length
         self._messages: Deque = deque(maxlen=max_length)
-
-    @abstractmethod
-    def append(self, *args, **kwargs):
-        pass
 
     @abstractstaticmethod
     def check_message_format(message):
@@ -55,6 +54,15 @@ class ChatHistory(ABC):
     @abstractmethod
     def to_request_format(self):
         pass
+
+    def add_assistant_message(self, message: str):
+        self.append(role=self.assistant_role, content=message)
+
+    def add_human_message(self, message: str):
+        self.append(role=self.human_role, content=message)
+
+    def append(self, role: str, content: str):
+        self._messages.append(self.check_message_format({"role": role, "content": content}))
 
     def clear(self):
         self._messages.clear()

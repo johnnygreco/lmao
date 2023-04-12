@@ -25,7 +25,7 @@ class AnthropicChatHistory(ChatHistory):
         return message
 
     def to_prompt(self, end_with_assistant_prompt: bool = True) -> str:
-        chat = "\n\n".join([f"{message['role']}: {message['content']}" for message in self._messages])
+        chat = "\n\n".join([f"{message['role'].title()}: {message['content']}" for message in self._messages])
         if end_with_assistant_prompt:
             chat += "\n\nAssistant:"
         return chat

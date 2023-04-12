@@ -15,8 +15,8 @@ class Schema(NamedTuple):
 
 
 class OpenAIChatHistory(ChatHistory):
-    def append(self, role: str, content: str):
-        self._messages.append(self.check_message_format({"role": role, "content": content}))
+    human_role: str = "user"
+    assistant_role: str = "assistant"
 
     @staticmethod
     def check_message_format(message):
