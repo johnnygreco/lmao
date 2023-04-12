@@ -1,10 +1,7 @@
-from __future__ import annotations
-
 import os
 import re
 from abc import ABC, abstractmethod, abstractstaticmethod
 from collections import deque
-from dataclasses import dataclass
 from typing import Callable, Deque, List, NamedTuple, Optional, Tuple
 
 import requests
@@ -27,8 +24,7 @@ API_HEADER_FORMAT_DICT = {
 }
 
 
-@dataclass
-class ClientResponse:
+class ClientResponse(NamedTuple):
     text: Optional[str]
     raw_response: dict
     status_code: int

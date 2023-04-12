@@ -1,5 +1,5 @@
 import inspect
-from typing import Tuple
+from typing import Tuple, Union
 
 import lmao.adapters as adapters
 import lmao.orchestrators as orcs
@@ -42,10 +42,12 @@ def _validate_input(lm_client_name: str, task: str):
     return lm_client_name, task
 
 
-def load_lm_client(lm_client_name: str, **kwargs) -> Tuple[BaseClient, ChatHistory]:
+def load_lm_client(
+    lm_client_name: str, chat_history: bool = False, **kwargs
+) -> Union[BaseClient, Tuple[BaseClient, ChatHistory]]:
     max_length = kwargs.pop("max_length", 5)
     Client, History = name_to_client[lm_client_name]
-    return Client(**kwargs), History(max_length=max_length)
+    return (Client(**kwargs), History(max_length=max_length)) if chat_history else Client(**kwargs)
 
 
 def load_orchestrator(lm_client_name: str, task: str, **kwargs) -> orcs.BaseOrchestrator:

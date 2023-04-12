@@ -30,8 +30,8 @@ class AnthropicChatHistory(ChatHistory):
             chat += "\n\nAssistant:"
         return chat
 
-    def to_request_format(self):
-        return self.to_prompt(end_with_assistant_prompt=True)
+    def to_request_format(self, end_with_assistant_prompt: bool = True):
+        return self.to_prompt(end_with_assistant_prompt=end_with_assistant_prompt)
 
 
 class AnthropicClient(BaseClient):
