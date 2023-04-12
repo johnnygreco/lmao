@@ -5,7 +5,7 @@ from pydantic import Extra, Field, validator
 
 from lmao.lm.schemas.base import API_DEFAULTS, BaseSchema
 
-__all__ = ["OpenAIChatSchema", "OpenAIGenerateSchema", "openai_model_regex"]
+__all__ = ["OpenAIChatSchema", "OpenAICompleteSchema", "openai_model_regex"]
 
 
 model_versions = r"(?:3\.5-turbo|4)"
@@ -39,7 +39,7 @@ class OpenAIChatSchema(BaseSchema):
         return v
 
 
-class OpenAIGenerateSchema(BaseSchema):
+class OpenAICompleteSchema(BaseSchema):
     """API Reference: https://platform.openai.com/docs/api-reference/completions/create"""
 
     class Config:

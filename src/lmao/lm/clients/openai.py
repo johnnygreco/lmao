@@ -1,9 +1,9 @@
-from typing import Literal, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional
 
 from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
-from lmao.lm.schemas.openai import OpenAIChatSchema, OpenAIGenerateSchema
+from lmao.lm.schemas.openai import OpenAIChatSchema, OpenAICompleteSchema
 
-__all__ = ["OpenAI"]
+__all__ = ["OpenAIClient", "OpenAIChatHistory"]
 
 
 DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
@@ -16,55 +16,55 @@ class Schema(NamedTuple):
 
 class OpenAIChatHistory(ChatHistory):
     def append(self, role: str, content: str):
-        message = self.check_message_format({"role": role, "content": content})
-        self._messages.append(message)
+        self._messages.append(self.check_message_format({"role": role, "content": content}))
 
-    def check_message_format(self, message):
+    @staticmethod
+    def check_message_format(message):
         if not isinstance(message, dict):
             raise ValueError(f"Message must be a dict, not {type(message)}.")
         if "role" not in message:
             raise ValueError("Message must have a 'role' key.")
         if "content" not in message:
             raise ValueError("Message must have a 'content' key.")
-        if message["role"] not in ["user", "assistant"]:
+        if message["role"].lower() not in ["user", "assistant"]:
             raise ValueError("Message role must be 'user' or 'assistant'.")
         return message
 
+    def to_request_format(self):
+        return self.messages
 
-class OpenAI(BaseClient):
+
+class OpenAIClient(BaseClient):
     base_url = "https://api.openai.com/v1"
     api_env_name = "OPENAI_API_KEY"
+    api_header_format = "bearer authentication"
 
-    schema = Schema(complete=OpenAIGenerateSchema.schema()["properties"], chat=OpenAIChatSchema.schema()["properties"])
+    schema = Schema(complete=OpenAICompleteSchema.schema()["properties"], chat=OpenAIChatSchema.schema()["properties"])
 
-    def __init__(self, api_key: Optional[str] = None, chat_history_length: int = 5):
+    def __init__(self, api_key: Optional[str] = None):
         super().__init__(api_key)
-        self.chat_history = OpenAIChatHistory(chat_history_length)
 
     def chat(
         self,
-        message_content: str,
-        role: Literal["user", "assistant"] = "user",
+        messages: List[Dict[str, str]],
         system_message: str = DEFAULT_SYSTEM_MESSAGE,
         **kwargs,
     ) -> ClientResponse:
-        self.chat_history.append(role=role, content=message_content)
-        messages = [{"role": "system", "content": system_message}] + list(self.chat_history)
+        messages = [{"role": "system", "content": system_message}] + [
+            OpenAIChatHistory.check_message_format(m) for m in messages
+        ]
         status_code, response = self._post_request(
             "chat/completions", OpenAIChatSchema(messages=messages, **kwargs).to_request_dict()
         )
-        assistant_message = response["choices"][0]["message"]["content"] if status_code == SUCCESS_STATUS_CODE else None
-        if assistant_message:
-            self.chat_history.append(role="assistant", content=assistant_message)
         return ClientResponse(
-            text=assistant_message,
+            text=response["choices"][0]["message"]["content"] if status_code == SUCCESS_STATUS_CODE else None,
             raw_response=response,
             status_code=status_code,
         )
 
     def complete(self, prompt: str, **kwargs) -> ClientResponse:
         status_code, response = self._post_request(
-            "completions", OpenAIGenerateSchema(prompt=prompt, **kwargs).to_request_dict()
+            "completions", OpenAICompleteSchema(prompt=prompt, **kwargs).to_request_dict()
         )
         return ClientResponse(
             text=response["choices"][0]["text"] if status_code == SUCCESS_STATUS_CODE else None,

@@ -1,5 +1,5 @@
 # 🙊 LMAO: **L**anguage **M**odel **A**dapters and **O**rchestrators
-> Leveraging the power of large LMs for common NLP tasks
+> Leveraging the power of large LMs for downstream NLP tasks
 
 ## 🚧 **Work in progress** 🚧
 This project is still in its early stages of development. The API is subject to change and the documentation is incomplete.

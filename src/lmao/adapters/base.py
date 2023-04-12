@@ -16,15 +16,15 @@ class TaskAdapterErrors(NamedTuple):
 @dataclass
 class TaskAdapterResponse:
     prediction: str
-    llm_response: ClientResponse
+    lm_response: ClientResponse
     success: bool
 
 
 class TaskAdapter(ABC):
-    def __init__(self, lm: BaseClient, lm_method_name: str, prompter: Prompter):
-        self.lm = lm
+    def __init__(self, lm_client: BaseClient, client_method_name: str, prompter: Prompter):
+        self.lm_client = lm_client
         self.prompter = prompter
-        self.lm_method_name = lm_method_name
+        self.client_method_name = client_method_name
 
     @abstractmethod
     def predict(self, text: str) -> TaskAdapterResponse:
