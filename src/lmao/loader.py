@@ -1,15 +1,23 @@
 import inspect
+from typing import Tuple
 
 import lmao.adapters as adapters
 import lmao.orchestrators as orcs
-from lmao.lm.clients import AnthropicClient, BaseClient, OpenAIClient
+from lmao.lm.clients import (
+    AnthropicChatHistory,
+    AnthropicClient,
+    BaseClient,
+    ChatHistory,
+    OpenAIChatHistory,
+    OpenAIClient,
+)
 
-__all__ = ["load_orchestrator", "load_task_adapter"]
+__all__ = ["load_lm_client", "load_orchestrator", "load_task_adapter"]
 
 
-default_lm_method = {"openai": "chat"}
+default_lm_method = {"openai": "chat", "anthropic": "complete"}
 
-name_to_client = {"anthropic": AnthropicClient, "openai": OpenAIClient}
+name_to_client = {"anthropic": (AnthropicClient, AnthropicChatHistory), "openai": (OpenAIClient, OpenAIChatHistory)}
 
 task_to_adapter = {
     "sentiment_analysis": adapters.SentimentAnalysisAdapter,
@@ -20,8 +28,8 @@ task_to_orchestrator = {
 }
 
 
-def _get_lm_kwargs(lm_provider: str, **kwargs):
-    return {k: kwargs.pop(k) for k in inspect.signature(name_to_client[lm_provider]).parameters.keys() if k in kwargs}
+def _get_lm_kwargs(name: str, **kwargs):
+    return {k: kwargs.pop(k) for k in inspect.signature(name_to_client[name][0]).parameters.keys() if k in kwargs}
 
 
 def _validate_input(lm_client_name: str, task: str):
@@ -34,14 +42,16 @@ def _validate_input(lm_client_name: str, task: str):
     return lm_client_name, task
 
 
-def load_lm_client(lm_client_name: str, **kwargs) -> BaseClient:
-    return name_to_client[lm_client_name](**kwargs)
+def load_lm_client(lm_client_name: str, **kwargs) -> Tuple[BaseClient, ChatHistory]:
+    max_length = kwargs.pop("max_length", 5)
+    Client, History = name_to_client[lm_client_name]
+    return Client(**kwargs), History(max_length=max_length)
 
 
 def load_orchestrator(lm_client_name: str, task: str, **kwargs) -> orcs.BaseOrchestrator:
     lm_client_name, task = _validate_input(lm_client_name, task)
     return task_to_orchestrator[task](
-        lm_client=name_to_client[lm_client_name](**_get_lm_kwargs(lm_client_name, **kwargs)),
+        lm_client=name_to_client[lm_client_name][0](**_get_lm_kwargs(lm_client_name, **kwargs)),
         client_method_name=kwargs.pop("client_method_name", default_lm_method[lm_client_name]),
         **kwargs,
     )
@@ -50,7 +60,7 @@ def load_orchestrator(lm_client_name: str, task: str, **kwargs) -> orcs.BaseOrch
 def load_task_adapter(lm_client_name: str, task: str, **kwargs) -> adapters.TaskAdapter:
     lm_client_name, task = _validate_input(lm_client_name, task)
     return task_to_adapter[task](
-        lm_client=name_to_client[lm_client_name](**_get_lm_kwargs(lm_client_name, **kwargs)),
+        lm_client=name_to_client[lm_client_name][0](**_get_lm_kwargs(lm_client_name, **kwargs)),
         client_method_name=kwargs.pop("client_method_name", default_lm_method[lm_client_name]),
         **kwargs,
     )
