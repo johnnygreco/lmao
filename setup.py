@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "0.0.1-beta.4"
+__version__ = "0.0.1-beta.5"
 
 with open("requirements.txt", "r") as f:
     install_requires = [line.replace("==", ">=") for line in f.read().splitlines() if line != "" if line[0] != "#"]
