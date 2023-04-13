@@ -30,7 +30,7 @@ class ClientResponse(NamedTuple):
     status_code: int
 
     def __repr__(self):
-        repr = "\n".join([f"{k}: {v}" for k, v in self.__dict__.items()])
+        repr = "\n".join([f"{k}: {v}" for k, v in self._asdict().items()])
         repr = re.sub(r"^", " " * 4, repr, 0, re.M)
         return f"{self.__class__.__name__}({{\n{repr}\n}})"
 
@@ -78,8 +78,12 @@ class ChatHistory(ABC):
         return len(self._messages)
 
     def __repr__(self):
-        repr = "\n".join([str(m) for m in self._messages])
-        repr = "\n" + re.sub(r"^", " " * 4, repr, 0, re.M) + "\n" if len(self._messages) > 0 else ""
+        max_length = f"max_length: {self.max_length}"
+        if len(self._messages) == 0:
+            repr = max_length
+        else:
+            repr = "\n".join([str(m) for m in self._messages]) + f"\n{max_length}"
+            repr = f"\n{re.sub(r'^', ' ' * 4, repr, 0, re.M)}\n"
         return f"{self.__class__.__name__}([{repr}])"
 
 

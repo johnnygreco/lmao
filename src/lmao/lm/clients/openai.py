@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional, Union
 
 from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
 from lmao.lm.schemas.openai import OpenAIChatSchema, OpenAICompleteSchema
@@ -46,13 +46,16 @@ class OpenAIClient(BaseClient):
 
     def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: Union[str, List[Dict[str, str]]],
         system_message: str = DEFAULT_SYSTEM_MESSAGE,
         **kwargs,
     ) -> ClientResponse:
-        messages = [{"role": "system", "content": system_message}] + [
-            OpenAIChatHistory.check_message_format(m) for m in messages
-        ]
+        if isinstance(messages, str):
+            messages = [{"role": "system", "content": system_message}] + [{"role": "user", "content": messages}]
+        elif len(messages) > 0:
+            messages = [{"role": "system", "content": system_message}] + [
+                OpenAIChatHistory.check_message_format(m) for m in messages
+            ]
         status_code, response = self._post_request(
             "chat/completions", OpenAIChatSchema(messages=messages, **kwargs).to_request_dict()
         )

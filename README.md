@@ -1,9 +1,7 @@
 # 🙊 LMAO: **L**anguage **M**odel **A**dapters and **O**rchestrators
 > Leveraging the power of large LMs for downstream NLP tasks
 
-## 🚧 **Work in progress** 🚧
-This project is still in its early stages of development. The API is subject to change and the documentation is incomplete.
-
+LMAO is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using zero- or few-shot learning with Claude or GPT-4. LMAO is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
 
 ## Installation
 The package is available on PyPI and can be installed with pip:
@@ -29,7 +27,7 @@ pip install -e ".[all]"
 ```
 
 ## LM Providers
-The plan is to add support for all major LM providers (both for external API-based models and locally run models). At this early stage of development, [OpenAI](https://platform.openai.com/) is the only supported provider. You'll need an activate OpenAI API key to use the LMAO library.
+The plan is to add support for all major LM providers (both for external API-based models and locally run models). At this early stage of development, [OpenAI](https://platform.openai.com/) and [Anthropic](https://console.anthropic.com/docs/api) are the only supported providers. You'll need an activate OpenAI API key to use the LMAO library.
 
 
 ## Quickstart

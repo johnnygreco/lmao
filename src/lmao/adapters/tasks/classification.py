@@ -1,6 +1,6 @@
 from typing import List
 
-from lmao.adapters.base import TaskAdapter, TaskAdapterResponse, adapter_errors
+from lmao.adapters.tasks.base import TaskAdapter, TaskAdapterResponse, adapter_errors
 from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient
 from lmao.lm.prompts.classification import ClassificationPrompter, SentimentAnalysisPrompter
 
