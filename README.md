@@ -1,6 +1,6 @@
 # 🙊 LMAO: **L**anguage **M**odel **A**dapters and **O**rchestrators
 
-<img src="assets/icon.png" height="180" align="right" />
+<img src="assets/icon.png" height="210" align="right" />
 
 
 > Leveraging the power of large LMs for downstream NLP tasks
