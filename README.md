@@ -1,5 +1,11 @@
 # 🙊 LMAO: **L**anguage **M**odel **A**dapters and **O**rchestrators
+
+<img src="assets/icon.png" height="180" align="right" />
+
+
 > Leveraging the power of large LMs for downstream NLP tasks
+
+<br>
 
 LMAO is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/docs/introduction) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using zero- or few-shot learning with Claude or GPT-4. LMAO is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
 

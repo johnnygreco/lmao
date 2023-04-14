@@ -8,7 +8,6 @@ install_requires = [
     "tiktoken>=0.3.3",
 ]
 
-
 extras_require = {
     "dev": [
         "pre-commit>=3.2.1",
