@@ -1,16 +1,18 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import NamedTuple
+from typing import NamedTuple, Protocol, runtime_checkable
 
 from lmao.adapters.base import BaseAdapter
 from lmao.lm.clients.base import ClientResponse
 
-__all__ = ["adapter_errors", "BaseTask"]
+__all__ = ["task_errors", "ModelProtocol", "QAProtocol", "TaskResponse"]
 
 
 class TaskErrors(NamedTuple):
     CLIENT_ERROR: str
     PREDICTION_ERROR: str
+
+
+task_errors = TaskErrors(CLIENT_ERROR="CLIENT ERROR", PREDICTION_ERROR="PREDICTION ERROR")
 
 
 @dataclass
@@ -20,13 +22,17 @@ class TaskResponse:
     success: bool
 
 
-class BaseTask(ABC):
-    def __init__(self, adapter: BaseAdapter):
-        self.adapter = adapter
+@runtime_checkable
+class ModelProtocol(Protocol):
+    adapter: BaseAdapter
 
-    @abstractmethod
-    def predict(self, text: str) -> TaskResponse:
-        pass
+    def predict(self, text: str, **kwargs) -> TaskResponse:
+        ...
 
 
-adapter_errors = TaskErrors(CLIENT_ERROR="CLIENT ERROR", PREDICTION_ERROR="PREDICTION ERROR")
+@runtime_checkable
+class QAProtocol(Protocol):
+    adapter: BaseAdapter
+
+    def ask(self, question: str, **kwargs) -> TaskResponse:
+        ...

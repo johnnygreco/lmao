@@ -32,7 +32,7 @@ The plan is to add support for all major LM providers (both for external API-bas
 
 ## Quickstart
 
-### Perform sentiment analysis with ChatGPT
+### 😀 😐 😖 Perform sentiment analysis with ChatGPT
 ```python
 from lmao import factory
 
@@ -46,7 +46,7 @@ print(result.prediction)
 # output: 'positive'
 ```
 
-### Create a Claude chatbot
+### 🤖 Create a Claude chatbot
 ```python
 from lmao import factory
 
@@ -68,4 +68,33 @@ print(response.text)
 # (devoured) the number nine, which is why six (the previous number) would
 # be afraid of seven. It's a silly pun, but that's why some people find
 # that type of simple wordplay amusing.
+```
+
+### 🪐 Solve Fermi Problems with Claude!
+```python
+from lmao import factory
+
+# create a Fermi Task task using an adapter for Anthropic's Claude
+fermi = factory.create_task("fermi_problem", "anthropic")
+
+# ask a Fermi-Problem style question
+response = fermi.ask("How many piano tuners are there in New York city?")
+
+print(response.text)
+# output:
+# Here is a step by step approach to estimate this:
+# 1) New York city population: Around 8.5 million people
+# 2) Assume a typical piano tuning needs to be done once per year.
+#    Also assume 1 piano for every 100 people.
+# 3) So number of pianos in NYC = 8.5 million * 1/100 = 85,000 pianos
+# 4) Assume a piano tuner can tune around 2-3 pianos per day. So in a year
+#    (365 days) they can tune around 800-1200 pianos.
+# 5) Number of piano tuners needed = Number of pianos / Number of pianos a
+#    tuner can tune in a year = 85,000 / 1000 = 85 piano tuners
+
+# So my estimate is there are around 85 full-time piano tuners in New York City.
+# Of course, there are assumptions and approximations in this estimate, but I think
+# this approach gives a reasonable order of magnitude estimate using logical thinking
+# and reasoning. Let me know if # # you would like me to clarify or expand on any part
+# of the solution.
 ```

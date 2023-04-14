@@ -19,7 +19,7 @@ class AnthropicCompleteSchema(BaseSchema):
 
     prompt: str = Field(default="Human: Hello, Friend\n\nAssistant:", description="The prompt to complete.")
     model: str = Field(default="claude-v1.3", description="Must be of the form `claude-[model_version]`.")
-    max_tokens_to_sample: int = API_DEFAULTS.generate_max_tokens
+    max_tokens_to_sample: int = API_DEFAULTS.complete_max_tokens
     stop_sequences: Optional[List[str]] = None
     stream: bool = False
     temperature: float = Field(default=1, ge=0.0, le=1.0)

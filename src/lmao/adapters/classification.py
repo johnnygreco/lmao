@@ -4,7 +4,7 @@ from lmao.adapters.base import BaseTaskAdapter
 from lmao.lm.clients.anthropic import AnthropicClient
 from lmao.lm.clients.base import BaseClient, ClientResponse
 from lmao.lm.clients.openai import OpenAIClient
-from lmao.lm.prompts.classification import ClassificationPrompter, SentimentAnalysisPrompter
+from lmao.prompters.classification import ClassificationPrompter, SentimentAnalysisPrompter
 
 __all__ = [
     "AnthropicSentimentAnalysisAdapter",
@@ -22,7 +22,7 @@ class TextClassificationAdapter(BaseTaskAdapter):
     ):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
-        prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories, **kwargs)
+        prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories)
         super().__init__(client=client, endpoint_method_name=endpoint_method_name, prompter=prompter)
 
 

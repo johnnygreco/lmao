@@ -13,6 +13,7 @@ class ObjectMapping(NamedTuple):
     name_to_task: dict = {
         "sentiment_analysis": tasks.TextClassification,
         "text_classification": tasks.TextClassification,
+        "fermi_problem": tasks.FermiProblem,
         "chatbot": tasks.Chatbot,
     }
     task_to_adapter: dict = {
@@ -27,6 +28,10 @@ class ObjectMapping(NamedTuple):
         "text_classification": {
             "anthropic": adapters.AnthropicTextClassificationAdapter,
             "openai": adapters.OpenAITextClassificationAdapter,
+        },
+        "fermi_problem": {
+            "anthropic": adapters.AnthropicFermiProblemAdapter,
+            "openai": adapters.OpenAIFermiProblemAdapter,
         },
     }
 
@@ -56,7 +61,7 @@ def create_client(
     return (Client(**kwargs), History(max_length=max_length)) if chat_history else Client(**kwargs)
 
 
-def create_task(task: str, client_name: str, **kwargs) -> Union[tasks.BaseTask, tasks.Chatbot]:
+def create_task(task: str, client_name: str, **kwargs) -> Union[tasks.ModelProtocol, tasks.QAProtocol, tasks.Chatbot]:
     task, client_name = _validate_task_input(task, client_name)
     Task = _m.name_to_task[task]
     client_adapter = _m.task_to_adapter[task][client_name](**kwargs)

@@ -6,7 +6,7 @@ __all__ = ["BaseSchema", "API_DEFAULTS"]
 
 
 class GLOBAL_API_DEFAULTS(NamedTuple):
-    generate_max_tokens: int = 256
+    complete_max_tokens: int = 512
 
 
 class BaseSchema(BaseModel):

@@ -48,7 +48,7 @@ class OpenAICompleteSchema(BaseSchema):
     model: str = Field(default="text-davinci-003", description="Must be of the form `text-davinci-[model_version]`.")
     prompt: Optional[str] = Field(default=None)
     suffix: Optional[str] = Field(default=None)
-    max_tokens: int = Field(default=API_DEFAULTS.generate_max_tokens, le=4096)
+    max_tokens: int = Field(default=API_DEFAULTS.complete_max_tokens, le=4096)
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     top_p: float = Field(default=1.0, ge=0.0, le=1.0)
     n: int = Field(default=1)
