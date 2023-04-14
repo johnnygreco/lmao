@@ -34,24 +34,24 @@ The plan is to add support for all major LM providers (both for external API-bas
 
 ### Perform sentiment analysis with ChatGPT
 ```python
-from lmao import loader
+from lmao import factory
 
-# load the sentiment analysis adapter for OpenAI's GPT-3.5-turbo model
-adapter = loader.load_task_adapter("openai", "sentiment_analysis")
+# create a sentiment analysis task using an adapter for OpenAI's GPT-3.5-turbo model
+model = factory.create_task("sentiment_analysis", "openai")
 
 # predict sentiment of the given text
-response = adapter.predict("This LMAO package is awesome!")
+result = model.predict("This LMAO package is awesome!")
 
-print(response.prediction)
+print(result.prediction)
 # output: 'positive'
 ```
 
 ### Create a Claude chatbot
 ```python
-from lmao import loader
+from lmao import factory
 
-# load a chatbot using Anthropic's Claude under the hood
-chatbot = loader.load_chatbot("anthropic")
+# create a chatbot using Anthropic's Claude under the hood
+chatbot = factory.create_chatbot("anthropic")
 
 response = chatbot.chat("Hello! Tell me a joke, please!")
 
@@ -62,11 +62,10 @@ print(response.text)
 response = chatbot.chat("Haha! Can you please explain why this is funny?")
 
 print(response.text)
-# output: Sure! This is a pun based joke. It plays on the homophones 
-# 'seven' and 'ate', and 'nine'. When spoken aloud, "seven eight nine" 
-# sounds like the phrase "seven ate nine". The joke implies that seven ate 
-# (devoured) the number nine, which is why six (the previous number) would 
-# be afraid of seven. It's a silly pun, but that's why some people find 
+# output: Sure! This is a pun based joke. It plays on the homophones
+# 'seven' and 'ate', and 'nine'. When spoken aloud, "seven eight nine"
+# sounds like the phrase "seven ate nine". The joke implies that seven ate
+# (devoured) the number nine, which is why six (the previous number) would
+# be afraid of seven. It's a silly pun, but that's why some people find
 # that type of simple wordplay amusing.
 ```
-

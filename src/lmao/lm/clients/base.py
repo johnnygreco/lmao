@@ -2,6 +2,7 @@ import os
 import re
 from abc import ABC, abstractmethod, abstractstaticmethod
 from collections import deque
+from dataclasses import dataclass
 from typing import Callable, Deque, List, NamedTuple, Optional, Tuple
 
 import requests
@@ -24,13 +25,14 @@ API_HEADER_FORMAT_DICT = {
 }
 
 
-class ClientResponse(NamedTuple):
+@dataclass
+class ClientResponse:
     text: Optional[str]
     raw_response: dict
     status_code: int
 
     def __repr__(self):
-        repr = "\n".join([f"{k}: {v}" for k, v in self._asdict().items()])
+        repr = "\n".join([f"{k}: {v}" for k, v in self.__dict__.items()])
         repr = re.sub(r"^", " " * 4, repr, 0, re.M)
         return f"{self.__class__.__name__}({{\n{repr}\n}})"
 
@@ -94,24 +96,25 @@ class LM(ABC):
 
 
 class BaseClient(LM, ABC):
-    base_url: str = "none"
-    api_env_name: str = "none"
-    api_header_format: str = "none"
+    base_url: Optional[str] = None
+    api_env_name: Optional[str] = None
+    api_header_format: Optional[str] = None
 
     #  If the backoff_factor is 0.1, then sleep() will sleep for [0.0s, 0.2s, 0.4s, …] between retries.
     RETRY_BACKOFF_FACTOR: float = 0.1
     RETRY_STATUS_CODES: List[int] = [429, 500, 502, 503, 504]
 
-    def __init__(self, api_key: Optional[str] = None, max_retries: int = 5):
+    def __init__(self, api_key: Optional[str] = None, max_retries: int = 5, default_method_name: str = "complete"):
         self.max_retries = max_retries
-        self.__api_key = api_key or os.environ.get(self.api_env_name)
+        self.__api_key = api_key or os.environ.get(self.api_env_name or "")
         if self.__api_key is None:
             raise ValueError("You must provide an API key or set api_env_name to initialize an LM Client.")
-        if self.base_url == "none":
+        if self.base_url is None:
             raise ValueError("Client subclasses must define a base URL attribute.")
         if self.api_header_format not in API_HEADER_FORMAT_DICT:
             raise ValueError(f"Client subclasses must have api_header_format in {list(API_HEADER_FORMAT_DICT.keys())}")
         self._api_header = API_HEADER_FORMAT_DICT[self.api_header_format]
+        self.default_method_name = default_method_name
 
     def _post_request(self, api_path: str, request: dict, extra_headers: Optional[dict] = None) -> Tuple[int, dict]:
         with requests.Session() as session:

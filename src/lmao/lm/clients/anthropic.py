@@ -41,8 +41,8 @@ class AnthropicClient(BaseClient):
 
     schema = Schema(complete=AnthropicCompleteSchema.schema()["properties"])
 
-    def __init__(self, api_key: Optional[str] = None):
-        super().__init__(api_key)
+    def __init__(self, api_key: Optional[str] = None, **kwargs):
+        super().__init__(api_key, **kwargs)
 
     def complete(self, prompt: str, **kwargs) -> ClientResponse:
         status_code, response = self._post_request(

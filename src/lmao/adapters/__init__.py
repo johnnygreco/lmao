@@ -1,3 +1,3 @@
-from .chatbot import Chatbot
-from .tasks.base import TaskAdapter
-from .tasks.classification import SentimentAnalysisAdapter, TextClassificationAdapter
+from .base import *
+from .chatbot import *
+from .classification import *

@@ -1,18 +1,42 @@
-from lmao.lm.clients import BaseClient, ChatHistory
-from lmao.lm.clients.base import SUCCESS_STATUS_CODE
+from typing import Optional
 
-__all__ = ["Chatbot"]
+from lmao.adapters.base import BaseChatbotAdapter
+from lmao.lm.clients.anthropic import AnthropicChatHistory, AnthropicClient
+from lmao.lm.clients.base import ClientResponse
+from lmao.lm.clients.openai import OpenAIChatHistory, OpenAIClient
+
+__all__ = ["AnthropicChatbotAdapter", "OpenAIChatbotAdapter"]
 
 
-class Chatbot:
-    def __init__(self, lm_client: BaseClient, chat_history: ChatHistory, client_method_name: str):
-        self.lm_client = lm_client
-        self.history = chat_history
-        self.client_method_name = client_method_name
+class AnthropicChatbotAdapter(BaseChatbotAdapter):
+    def __init__(self, api_key: Optional[str] = None, chat_history_length: int = 5):
+        super().__init__(
+            client=AnthropicClient(api_key),
+            endpoint_method_name="complete",
+            chat_history=AnthropicChatHistory(max_length=chat_history_length),
+        )
 
-    def chat(self, message: str, **kwargs) -> str:
-        self.history.add_human_message(message)
-        response = getattr(self.lm_client, self.client_method_name)(self.history.to_request_format(), **kwargs)
-        if response.status_code == SUCCESS_STATUS_CODE:
-            self.history.add_assistant_message(response.text)
+    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
+        if response.text is not None:
+            response.text = response.text.strip()
         return response
+
+    def to_endpoint_kwargs(self, request: str) -> dict:
+        return {"prompt": request}
+
+
+class OpenAIChatbotAdapter(BaseChatbotAdapter):
+    def __init__(self, api_key: Optional[str] = None, chat_history_length: int = 5):
+        super().__init__(
+            client=OpenAIClient(api_key),
+            endpoint_method_name="chat",
+            chat_history=OpenAIChatHistory(max_length=chat_history_length),
+        )
+
+    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
+        if response.text is not None:
+            response.text = response.text.strip()
+        return response
+
+    def to_endpoint_kwargs(self, request) -> dict:
+        return {"messages": request}
