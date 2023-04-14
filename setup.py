@@ -2,19 +2,27 @@ from setuptools import find_packages, setup
 
 __version__ = "0.0.1-beta.6"
 
-with open("requirements.txt", "r") as f:
-    install_requires = [line.replace("==", ">=") for line in f.read().splitlines() if line != "" if line[0] != "#"]
+install_requires = [
+    "pydantic>=1.10.7",
+    "requests>=2.28.2",
+    "tiktoken>=0.3.3",
+]
 
-extras_require = {}
 
-with open("requirements-dev.txt", "r") as f:
-    extras_require["dev"] = [line for line in f.read().splitlines() if line != "" if line[0] != "#"]
+extras_require = {
+    "dev": [
+        "pre-commit>=3.2.1",
+        "pytest>=7.2.2",
+        "responses>=0.23.1",
+    ],
+    "docs": [
+        "mkdocs>=1.4.2",
+        "mkdocstrings>=0.20.0",
+        "mkdocs-material>=9.1.4",
+    ],
+}
 
-with open("requirements-docs.txt", "r") as f:
-    extras_require["docs"] = [line for line in f.read().splitlines() if line != "" if line[0] != "#"]
-
-extras_require["all"] = [req for req_list in extras_require.values() for req in req_list]
-
+extras_require["all"] = extras_require["dev"] + extras_require["docs"]
 
 setup(
     name="lmao-nlp",
