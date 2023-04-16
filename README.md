@@ -2,7 +2,7 @@
 
 <img src="assets/icon.png" height="210" align="right" />
 
-> The data scientist's toolkit for leveraging the power of large LMs for downstream NLP tasks
+> The data scientist's toolkit for adapting large LMs to solve a diverse set of tasks
 
 <br>
 
