@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from lmao.lm.clients.base import BaseClient, ChatHistory, ClientResponse
-from lmao.prompters.base import Prompter
+from lmao.prompters import Prompter
 
 __all__ = ["BaseAdapter", "BaseChatbotAdapter", "BaseTaskAdapter"]
 

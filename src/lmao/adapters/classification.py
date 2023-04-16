@@ -3,12 +3,15 @@ from typing import List, Optional
 from lmao.adapters.base import BaseTaskAdapter
 from lmao.lm.clients.anthropic import AnthropicClient
 from lmao.lm.clients.base import BaseClient, ClientResponse
+from lmao.lm.clients.cohere import CohereClient
 from lmao.lm.clients.openai import OpenAIClient
 from lmao.prompters.classification import ClassificationPrompter, SentimentAnalysisPrompter
 
 __all__ = [
     "AnthropicSentimentAnalysisAdapter",
     "AnthropicTextClassificationAdapter",
+    "CohereSentimentAnalysisAdapter",
+    "CohereTextClassificationAdapter",
     "OpenAISentimentAnalysisAdapter",
     "OpenAITextClassificationAdapter",
     "SentimentAnalysisAdapter",
@@ -63,6 +66,46 @@ class AnthropicSentimentAnalysisAdapter(AnthropicClassificationMixin, SentimentA
     def __init__(self, include_neutral: bool = True, api_key: Optional[str] = None, **kwargs):
         super().__init__(
             client=AnthropicClient(api_key),
+            endpoint_method_name="complete",
+            include_neutral=include_neutral,
+            **kwargs,
+        )
+
+
+class CohereClassificationMixin:
+    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
+        if response.text is not None:
+            response.text = response.text.strip()
+        return response
+
+    def to_endpoint_kwargs(self, request) -> dict:
+        return {"prompt": request}
+
+
+class CohereTextClassificationAdapter(CohereClassificationMixin, TextClassificationAdapter):
+    def __init__(
+        self,
+        categories: List[str],
+        lowercase: bool = True,
+        api_key: Optional[str] = None,
+        api_version: str = "2022-12-06",
+        **kwargs
+    ):
+        super().__init__(
+            client=CohereClient(api_key, api_version=api_version),
+            endpoint_method_name="complete",
+            categories=categories,
+            lowercase=lowercase,
+            **kwargs,
+        )
+
+
+class CohereSentimentAnalysisAdapter(CohereClassificationMixin, SentimentAnalysisAdapter):
+    def __init__(
+        self, include_neutral: bool = True, api_key: Optional[str] = None, api_version: str = "2022-12-06", **kwargs
+    ):
+        super().__init__(
+            client=CohereClient(api_key, api_version=api_version),
             endpoint_method_name="complete",
             include_neutral=include_neutral,
             **kwargs,

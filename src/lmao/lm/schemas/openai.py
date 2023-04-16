@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 
 from pydantic import Extra, Field, validator
 
-from lmao.lm.schemas.base import API_DEFAULTS, BaseSchema
+from lmao.lm.schemas import API_DEFAULTS, BaseSchema
 
 __all__ = ["OpenAIChatSchema", "OpenAICompleteSchema", "openai_model_regex"]
 

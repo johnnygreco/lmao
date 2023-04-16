@@ -8,7 +8,11 @@ __all__ = ["create_chatbot", "create_client", "create_task"]
 
 
 class ObjectMapping(NamedTuple):
-    name_to_client: dict = {"anthropic": clients.AnthropicClient, "openai": clients.OpenAIClient}
+    name_to_client: dict = {
+        "anthropic": clients.AnthropicClient,
+        "cohere": clients.CohereClient,
+        "openai": clients.OpenAIClient,
+    }
     name_to_history: dict = {"anthropic": clients.AnthropicChatHistory, "openai": clients.OpenAIChatHistory}
     name_to_task: dict = {
         "sentiment_analysis": tasks.TextClassification,
@@ -23,14 +27,17 @@ class ObjectMapping(NamedTuple):
         },
         "sentiment_analysis": {
             "anthropic": adapters.AnthropicSentimentAnalysisAdapter,
+            "cohere": adapters.CohereSentimentAnalysisAdapter,
             "openai": adapters.OpenAISentimentAnalysisAdapter,
         },
         "text_classification": {
             "anthropic": adapters.AnthropicTextClassificationAdapter,
+            "cohere": adapters.CohereTextClassificationAdapter,
             "openai": adapters.OpenAITextClassificationAdapter,
         },
         "fermi_problem": {
             "anthropic": adapters.AnthropicFermiProblemAdapter,
+            "cohere": adapters.CohereFermiProblemAdapter,
             "openai": adapters.OpenAIFermiProblemAdapter,
         },
     }
@@ -61,7 +68,9 @@ def create_client(
     return (Client(**kwargs), History(max_length=max_length)) if chat_history else Client(**kwargs)
 
 
-def create_task(task: str, client_name: str, **kwargs) -> Union[tasks.ModelProtocol, tasks.QAProtocol, tasks.Chatbot]:
+def create_task(
+    task: str, client_name: str, **kwargs
+) -> Union[tasks.ModelTaskProtocol, tasks.QATaskProtocol, tasks.Chatbot]:
     task, client_name = _validate_task_input(task, client_name)
     Task = _m.name_to_task[task]
     client_adapter = _m.task_to_adapter[task][client_name](**kwargs)

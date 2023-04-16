@@ -4,7 +4,7 @@ from typing import NamedTuple, Protocol, runtime_checkable
 from lmao.adapters.base import BaseAdapter
 from lmao.lm.clients.base import ClientResponse
 
-__all__ = ["task_errors", "ModelProtocol", "QAProtocol", "TaskResponse"]
+__all__ = ["task_errors", "ModelTaskProtocol", "QATaskProtocol", "TaskResponse"]
 
 
 class TaskErrors(NamedTuple):
@@ -23,7 +23,7 @@ class TaskResponse:
 
 
 @runtime_checkable
-class ModelProtocol(Protocol):
+class ModelTaskProtocol(Protocol):
     adapter: BaseAdapter
 
     def predict(self, text: str, **kwargs) -> TaskResponse:
@@ -31,7 +31,7 @@ class ModelProtocol(Protocol):
 
 
 @runtime_checkable
-class QAProtocol(Protocol):
+class QATaskProtocol(Protocol):
     adapter: BaseAdapter
 
     def ask(self, question: str, **kwargs) -> TaskResponse:

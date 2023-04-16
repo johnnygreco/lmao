@@ -2,7 +2,7 @@ from typing import List
 
 from lmao.prompters.base import Prompter, build_prompt_template
 
-__all__ = ["ClassificationPrompter"]
+__all__ = ["ClassificationPrompter", "SentimentAnalysisPrompter"]
 
 
 class ClassificationPrompter(Prompter):
