@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "0.0.1-beta.8"
+__version__ = "0.0.1-beta.9"
 
 install_requires = [
     "pydantic>=1.10.7",
