@@ -1,13 +1,11 @@
-<img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" />
+<img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 70px; margin-top: 20px" />
 
 # 🙊 LMAO
-
-
-> Adapting large language models to perform a diverse set of tasks 🦾
+> **L**anguage **M**odel **A**dapters and **O**rchestrators: A data scientist's toolkit for adapting LLMs to perform downstream NLP tasks 🦾
 
 <br>
 
-**L**anguage **M**odel **A**dapters and **O**rchestrators, `lmao`, is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/docs/introduction) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using zero- or few-shot learning with Claude or GPT-4. `lmao` is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
+`lmao` is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/docs/introduction) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using few-shot learning with Claude or GPT-4. `lmao` is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
 
 ## Installation
 The package is available on PyPI and can be installed with pip:
