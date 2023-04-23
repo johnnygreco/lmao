@@ -372,13 +372,13 @@
   
 
 
-<p><img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" /></p>
+<p><img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 70px; margin-top: 20px" /></p>
 <h1 id="lmao">🙊 LMAO</h1>
 <blockquote>
-<p>Adapting large language models to perform a diverse set of tasks 🦾</p>
+<p><strong>L</strong>anguage <strong>M</strong>odel <strong>A</strong>dapters and <strong>O</strong>rchestrators: A data scientist's toolkit for adapting LLMs to perform downstream NLP tasks 🦾</p>
 </blockquote>
 <p><br></p>
-<p><strong>L</strong>anguage <strong>M</strong>odel <strong>A</strong>dapters and <strong>O</strong>rchestrators, <code>lmao</code>, is an open-source library for integrating large language models (LLMs) from providers like <a href="https://platform.openai.com/docs/introduction">OpenAI</a> and <a href="https://console.anthropic.com/docs/api">Anthropic</a> into your NLP workflows. For example, it can be used to pre-annotate text datasets using zero- or few-shot learning with Claude or GPT-4. <code>lmao</code> is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.</p>
+<p><code>lmao</code> is an open-source library for integrating large language models (LLMs) from providers like <a href="https://platform.openai.com/docs/introduction">OpenAI</a> and <a href="https://console.anthropic.com/docs/api">Anthropic</a> into your NLP workflows. For example, it can be used to pre-annotate text datasets using few-shot learning with Claude or GPT-4. <code>lmao</code> is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.</p>
 <h2 id="installation">Installation</h2>
 <p>The package is available on PyPI and can be installed with pip:
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>lmao-nlp
@@ -429,7 +429,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <h3 id="perform-sentiment-analysis-with-cohere">😀 😐 😖 Perform sentiment analysis with Cohere</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">lmao</span> <span class="kn">import</span> <span class="n">factory</span>
 
-<span class="c1"># create a sentiment analysis task using an adapter </span>
+<span class="c1"># create a sentiment analysis task using an adapter</span>
 <span class="c1"># for Cohere&#39;s command-xlarge-nightly</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="s2">&quot;sentiment_analysis&quot;</span><span class="p">,</span> <span class="s2">&quot;cohere&quot;</span><span class="p">)</span>
 
@@ -460,10 +460,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="c1"># 5) Number of piano tuners needed = Number of pianos / Number of pianos a</span>
 <span class="c1">#    tuner can tune in a year = 85,000 / 1000 = 85 piano tuners</span>
 
-<span class="c1"># So my estimate is there are around 85 full-time piano tuners in </span>
-<span class="c1"># New York City. Of course, there are assumptions and approximations in this </span>
-<span class="c1"># estimate, but I think this approach gives a reasonable order of magnitude </span>
-<span class="c1"># estimate using logical thinking and reasoning. Let me know if you would </span>
+<span class="c1"># So my estimate is there are around 85 full-time piano tuners in</span>
+<span class="c1"># New York City. Of course, there are assumptions and approximations in this</span>
+<span class="c1"># estimate, but I think this approach gives a reasonable order of magnitude</span>
+<span class="c1"># estimate using logical thinking and reasoning. Let me know if you would</span>
 <span class="c1"># like me to clarify or expand on any part of the solution.</span>
 </code></pre></div>
 
