@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" />
+<img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 30px;" />
 
 # 🙊 LMAO
 
