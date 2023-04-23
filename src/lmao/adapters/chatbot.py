@@ -1,6 +1,7 @@
 from typing import Optional
 
-from lmao.adapters import AnthropicAdapterMixin, BaseAdapter, OpenAIAdapterMixin
+from .base import BaseAdapter
+from .client_mixins import AnthropicAdapterMixin, OpenAIAdapterMixin
 
 __all__ = ["AnthropicChatbotAdapter", "BaseChatbotAdapter", "OpenAIChatbotAdapter"]
 

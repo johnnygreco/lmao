@@ -1,5 +1,5 @@
-from lmao.adapters import FermiProblemAdapter
-from lmao.lm.clients import ClientResponse
+from ..adapters import FermiProblemAdapter
+from ..clients import ClientResponse
 
 __all__ = ["FermiProblem"]
 

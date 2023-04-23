@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from lmao.lm.schemas import API_DEFAULTS, BaseSchema
+from .base import API_DEFAULTS, BaseSchema
 
 __all__ = ["CohereCompleteSchema"]
 

@@ -1,7 +1,7 @@
 from typing import NamedTuple, Optional
 
-from lmao.lm.clients import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
-from lmao.lm.schemas import AnthropicCompleteSchema
+from ..clients import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
+from ..clients.schemas import AnthropicCompleteSchema
 
 __all__ = ["AnthropicClient", "AnthropicChatHistory"]
 

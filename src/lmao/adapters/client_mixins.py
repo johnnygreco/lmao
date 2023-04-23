@@ -1,6 +1,6 @@
 from typing import Optional
 
-from lmao.lm.clients import AnthropicClient, ClientResponse, CohereClient, OpenAIClient
+from ..clients import AnthropicClient, ClientResponse, CohereClient, OpenAIClient
 
 __all__ = ["AnthropicAdapterMixin", "CohereAdapterMixin", "OpenAIAdapterMixin"]
 

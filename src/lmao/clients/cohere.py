@@ -1,7 +1,7 @@
 from typing import NamedTuple, Optional
 
-from lmao.lm.clients import SUCCESS_STATUS_CODE, BaseClient, ClientResponse
-from lmao.lm.schemas import CohereCompleteSchema
+from ..clients import SUCCESS_STATUS_CODE, BaseClient, ClientResponse
+from ..clients.schemas import CohereCompleteSchema
 
 __all__ = ["CohereClient"]
 

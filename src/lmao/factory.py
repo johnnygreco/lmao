@@ -1,8 +1,6 @@
 from typing import NamedTuple, Tuple, Union
 
-import lmao.adapters as adapters
-import lmao.lm.clients as clients
-import lmao.tasks as tasks
+from . import adapters, clients, tasks
 
 __all__ = ["create_chatbot", "create_client", "create_task"]
 

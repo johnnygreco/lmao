@@ -1,7 +1,8 @@
 from typing import Optional
 
-from lmao.adapters import AnthropicAdapterMixin, BaseTaskAdapter, CohereAdapterMixin, OpenAIAdapterMixin
-from lmao.prompters import FermiProblemPrompter
+from ..prompters import FermiProblemPrompter
+from .base import BaseTaskAdapter
+from .client_mixins import AnthropicAdapterMixin, CohereAdapterMixin, OpenAIAdapterMixin
 
 __all__ = [
     "FermiProblemAdapter",

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from lmao.lm.clients import BaseClient, ClientResponse
-from lmao.prompters import Prompter
+from ..clients import BaseClient, ClientResponse
+from ..prompters import Prompter
 
 __all__ = ["BaseAdapter", "BaseTaskAdapter"]
 

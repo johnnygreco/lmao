@@ -1,6 +1,6 @@
-from lmao.adapters import TextClassificationAdapter
-from lmao.lm.clients import SUCCESS_STATUS_CODE
-from lmao.tasks import TaskResponse, task_errors
+from ..adapters import TextClassificationAdapter
+from ..clients import SUCCESS_STATUS_CODE
+from .base import TaskResponse, task_errors
 
 __all__ = ["TextClassification"]
 

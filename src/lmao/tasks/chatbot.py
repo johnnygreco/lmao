@@ -1,5 +1,5 @@
-from lmao.adapters import BaseChatbotAdapter
-from lmao.lm.clients import SUCCESS_STATUS_CODE, ClientResponse
+from ..adapters import BaseChatbotAdapter
+from ..clients import SUCCESS_STATUS_CODE, ClientResponse
 
 __all__ = ["Chatbot"]
 

@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from lmao.adapters import AnthropicAdapterMixin, BaseTaskAdapter, CohereAdapterMixin, OpenAIAdapterMixin
-from lmao.prompters import ClassificationPrompter, Prompter, SentimentAnalysisPrompter
+from ..prompters import ClassificationPrompter, Prompter, SentimentAnalysisPrompter
+from .base import BaseTaskAdapter
+from .client_mixins import AnthropicAdapterMixin, CohereAdapterMixin, OpenAIAdapterMixin
 
 __all__ = [
     "AnthropicSentimentAnalysisAdapter",
