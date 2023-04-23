@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.0-beta.1 (2023-04-22)
+
+
 ## v0.0.1-beta.2 (2023-04-22)
 ### Fix
 * Openai import bug ([`232df73`](https://github.com/johnnygreco/lmao/commit/232df73e4243c5019d0928ae2dba05e2445af254))
