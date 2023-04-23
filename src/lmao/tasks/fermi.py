@@ -10,7 +10,7 @@ class FermiProblem:
 
     def ask(self, question: str, **kwargs) -> ClientResponse:
         input_text = self.adapter.prompter.create_prompt(question)
-        kwargs.update(self.adapter.to_endpoint_kwargs(input_text))
-        response = getattr(self.adapter.client, self.adapter.endpoint_method_name)(**kwargs)
+        kwargs.update(self.adapter.prepare_input_content(input_text))
+        response = getattr(self.adapter.client, str(self.adapter.client._target_api_endpoint))(**kwargs)
         response = self.adapter.postprocess_response(response)
         return response

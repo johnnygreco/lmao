@@ -104,7 +104,7 @@ class BaseClient(LM, ABC):
     RETRY_BACKOFF_FACTOR: float = 0.1
     RETRY_STATUS_CODES: List[int] = [429, 500, 502, 503, 504]
 
-    def __init__(self, api_key: Optional[str] = None, max_retries: int = 5, default_method_name: str = "complete"):
+    def __init__(self, api_key: Optional[str] = None, max_retries: int = 5):
         self.max_retries = max_retries
         self.__api_key = api_key or os.environ.get(self.api_env_name or "")
         if self.__api_key is None:
@@ -114,7 +114,7 @@ class BaseClient(LM, ABC):
         if self.api_header_format not in API_HEADER_FORMAT_DICT:
             raise ValueError(f"Client subclasses must have api_header_format in {list(API_HEADER_FORMAT_DICT.keys())}")
         self._api_header = API_HEADER_FORMAT_DICT[self.api_header_format]
-        self.default_method_name = default_method_name
+        self._target_api_endpoint: Optional[str] = None
 
     def _post_request(self, api_path: str, request: dict, extra_headers: Optional[dict] = None) -> Tuple[int, dict]:
         with requests.Session() as session:
@@ -142,3 +142,9 @@ class BaseClient(LM, ABC):
             response_dict = {}
             status_code = 500 if status_code != SUCCESS_STATUS_CODE else status_code
         return status_code, response_dict
+
+    def create_chat_history(self, max_length: int = 10) -> ChatHistory:
+        raise NotImplementedError("Client subclasses must implement create_chat_history.")
+
+    def set_target_api_endpoint(self, name: str):
+        self._target_api_endpoint = name

@@ -1,6 +1,6 @@
 from lmao.adapters import TextClassificationAdapter
-from lmao.lm.clients.base import SUCCESS_STATUS_CODE
-from lmao.tasks.base import TaskResponse, task_errors
+from lmao.lm.clients import SUCCESS_STATUS_CODE
+from lmao.tasks import TaskResponse, task_errors
 
 __all__ = ["TextClassification"]
 
@@ -13,8 +13,8 @@ class TextClassification:
     def predict(self, text: str, **kwargs) -> TaskResponse:
         success = True
         input_text = self.adapter.prompter.create_prompt(text)
-        kwargs.update(self.adapter.to_endpoint_kwargs(input_text))
-        response = getattr(self.adapter.client, self.adapter.endpoint_method_name)(**kwargs)
+        kwargs.update(self.adapter.prepare_input_content(input_text))
+        response = getattr(self.adapter.client, str(self.adapter.client._target_api_endpoint))(**kwargs)
         if response.status_code == SUCCESS_STATUS_CODE:
             prediction = response.text.strip().lower() if self.adapter.lowercase else response.text.strip()
             prediction = prediction.replace(".", "")

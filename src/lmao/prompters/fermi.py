@@ -1,4 +1,4 @@
-from lmao.prompters.base import Prompter, build_prompt_template
+from lmao.prompters import Prompter, build_prompt_template
 
 __all__ = ["FermiProblemPrompter"]
 

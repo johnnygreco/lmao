@@ -1,31 +1,30 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
-from lmao.lm.clients.base import BaseClient, ChatHistory, ClientResponse
+from lmao.lm.clients import BaseClient, ClientResponse
 from lmao.prompters import Prompter
 
-__all__ = ["BaseAdapter", "BaseChatbotAdapter", "BaseTaskAdapter"]
+__all__ = ["BaseAdapter", "BaseTaskAdapter"]
 
 
 class BaseAdapter(ABC):
-    def __init__(self, client: BaseClient, endpoint_method_name: str):
-        self.client = client
-        self.endpoint_method_name = endpoint_method_name
+    def __init__(self, api_key: Optional[str] = None, **kwargs):
+        self.client = self.load_client(api_key, **kwargs)
+        assert self.client._target_api_endpoint is not None, "You must set the client's target API endpoint."
+
+    @abstractmethod
+    def load_client(self, api_key: Optional[str] = None, **kwargs) -> BaseClient:
+        pass
+
+    @abstractmethod
+    def prepare_input_content(self, content) -> dict:
+        pass
 
     def postprocess_response(self, response: ClientResponse) -> ClientResponse:
         return response
 
-    @abstractmethod
-    def to_endpoint_kwargs(self, request) -> dict:
-        pass
-
-
-class BaseChatbotAdapter(BaseAdapter):
-    def __init__(self, client: BaseClient, endpoint_method_name: str, chat_history: ChatHistory):
-        self.chat_history = chat_history
-        super().__init__(client=client, endpoint_method_name=endpoint_method_name)
-
 
 class BaseTaskAdapter(BaseAdapter):
-    def __init__(self, client: BaseClient, endpoint_method_name: str, prompter: Prompter):
+    def __init__(self, prompter: Prompter, api_key: Optional[str] = None, **kwargs):
         self.prompter = prompter
-        super().__init__(client=client, endpoint_method_name=endpoint_method_name)
+        super().__init__(api_key, **kwargs)

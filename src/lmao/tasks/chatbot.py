@@ -1,5 +1,5 @@
-from lmao.adapters.base import BaseChatbotAdapter
-from lmao.lm.clients.base import SUCCESS_STATUS_CODE, ClientResponse
+from lmao.adapters import BaseChatbotAdapter
+from lmao.lm.clients import SUCCESS_STATUS_CODE, ClientResponse
 
 __all__ = ["Chatbot"]
 
@@ -12,8 +12,8 @@ class Chatbot:
 
     def chat(self, message: str, **kwargs) -> ClientResponse:
         self.history.add_human_message(message)
-        kwargs.update(self.adapter.to_endpoint_kwargs(self.history.to_request_format()))
-        response = getattr(self.client, self.adapter.endpoint_method_name)(**kwargs)
+        kwargs.update((self.history.to_request_format()))
+        response = getattr(self.client, str(self.client._target_api_endpoint))(**kwargs)
         if response.status_code == SUCCESS_STATUS_CODE:
             self.history.add_assistant_message(response.text)
         return self.adapter.postprocess_response(response)

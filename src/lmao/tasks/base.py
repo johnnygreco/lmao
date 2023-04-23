@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import NamedTuple, Protocol, runtime_checkable
 
-from lmao.adapters.base import BaseAdapter
-from lmao.lm.clients.base import ClientResponse
+from lmao.adapters import BaseAdapter
+from lmao.lm.clients import ClientResponse
 
 __all__ = ["task_errors", "ModelTaskProtocol", "QATaskProtocol", "TaskResponse"]
 

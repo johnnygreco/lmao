@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from pydantic import Extra, Field, validator
 
-from lmao.lm.schemas.base import API_DEFAULTS, BaseSchema
+from lmao.lm.schemas import API_DEFAULTS, BaseSchema
 
 __all__ = ["AnthropicCompleteSchema", "anthropic_model_regex"]
 

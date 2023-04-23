@@ -1,7 +1,7 @@
 from typing import NamedTuple, Optional
 
-from lmao.lm.clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
-from lmao.lm.schemas.anthropic import AnthropicCompleteSchema
+from lmao.lm.clients import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
+from lmao.lm.schemas import AnthropicCompleteSchema
 
 __all__ = ["AnthropicClient", "AnthropicChatHistory"]
 
@@ -31,7 +31,7 @@ class AnthropicChatHistory(ChatHistory):
         return chat
 
     def to_request_format(self, end_with_assistant_prompt: bool = True):
-        return self.to_prompt(end_with_assistant_prompt=end_with_assistant_prompt)
+        return {"prompt": self.to_prompt(end_with_assistant_prompt=end_with_assistant_prompt)}
 
 
 class AnthropicClient(BaseClient):
@@ -54,3 +54,6 @@ class AnthropicClient(BaseClient):
             raw_response=response,
             status_code=status_code,
         )
+
+    def create_chat_history(self, max_length: int = 5) -> AnthropicChatHistory:
+        return AnthropicChatHistory(max_length=max_length)

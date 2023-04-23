@@ -1,9 +1,6 @@
 from typing import Optional
 
-from lmao.adapters import BaseTaskAdapter
-from lmao.lm.clients import AnthropicClient, BaseClient, ClientResponse
-from lmao.lm.clients.cohere import CohereClient
-from lmao.lm.clients.openai import OpenAIClient
+from lmao.adapters import AnthropicAdapterMixin, BaseTaskAdapter, CohereAdapterMixin, OpenAIAdapterMixin
 from lmao.prompters import FermiProblemPrompter
 
 __all__ = [
@@ -15,44 +12,17 @@ __all__ = [
 
 
 class FermiProblemAdapter(BaseTaskAdapter):
-    def __init__(self, client: BaseClient, endpoint_method_name: str):
-        super().__init__(client, endpoint_method_name, prompter=FermiProblemPrompter())
+    def __init__(self, api_key: Optional[str] = None, **kwargs):
+        super().__init__(api_key=api_key, prompter=FermiProblemPrompter(), **kwargs)
 
 
-class AnthropicFermiProblemAdapter(FermiProblemAdapter):
-    def __init__(self, api_key: Optional[str] = None):
-        super().__init__(client=AnthropicClient(api_key), endpoint_method_name="complete")
-
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
-
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"prompt": request}
+class AnthropicFermiProblemAdapter(AnthropicAdapterMixin, FermiProblemAdapter):
+    """Adapter for solving Fermi problems with Anthropic."""
 
 
-class CohereFermiProblemAdapter(FermiProblemAdapter):
-    def __init__(self, api_key: Optional[str] = None, api_version: str = "2022-12-06"):
-        super().__init__(client=CohereClient(api_key, api_version=api_version), endpoint_method_name="complete")
-
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
-
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"prompt": request}
+class CohereFermiProblemAdapter(CohereAdapterMixin, FermiProblemAdapter):
+    """Adapter for solving Fermi problems with Cohere."""
 
 
-class OpenAIFermiProblemAdapter(FermiProblemAdapter):
-    def __init__(self, api_key: Optional[str] = None):
-        super().__init__(client=OpenAIClient(api_key), endpoint_method_name="chat")
-
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
-
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"messages": [{"role": "user", "content": request}]}
+class OpenAIFermiProblemAdapter(OpenAIAdapterMixin, FermiProblemAdapter):
+    """Adapter for solving Fermi problems with OpenAI."""

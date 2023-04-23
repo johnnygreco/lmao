@@ -1,11 +1,7 @@
 from typing import List, Optional
 
-from lmao.adapters.base import BaseTaskAdapter
-from lmao.lm.clients.anthropic import AnthropicClient
-from lmao.lm.clients.base import BaseClient, ClientResponse
-from lmao.lm.clients.cohere import CohereClient
-from lmao.lm.clients.openai import OpenAIClient
-from lmao.prompters.classification import ClassificationPrompter, SentimentAnalysisPrompter
+from lmao.adapters import AnthropicAdapterMixin, BaseTaskAdapter, CohereAdapterMixin, OpenAIAdapterMixin
+from lmao.prompters import ClassificationPrompter, Prompter, SentimentAnalysisPrompter
 
 __all__ = [
     "AnthropicSentimentAnalysisAdapter",
@@ -21,123 +17,55 @@ __all__ = [
 
 class TextClassificationAdapter(BaseTaskAdapter):
     def __init__(
-        self, client: BaseClient, endpoint_method_name: str, categories: List[str], lowercase: bool = True, **kwargs
+        self,
+        categories: List[str],
+        prompter: Optional[Prompter] = None,
+        lowercase: bool = True,
+        api_key: Optional[str] = None,
+        **kwargs
     ):
         self.lowercase = lowercase
         self.categories = [c.lower() for c in categories] if lowercase else categories
-        prompter = kwargs.pop("prompter", None) or ClassificationPrompter(categories=self.categories)
-        super().__init__(client=client, endpoint_method_name=endpoint_method_name, prompter=prompter)
+        prompter = prompter or ClassificationPrompter(categories=self.categories)
+        super().__init__(prompter=prompter, api_key=api_key, **kwargs)
 
 
 class SentimentAnalysisAdapter(TextClassificationAdapter):
-    def __init__(self, client: BaseClient, endpoint_method_name: str, include_neutral: bool = True, **kwargs):
+    def __init__(self, include_neutral: bool = True, api_key: Optional[str] = None, **kwargs):
         super().__init__(
-            client=client,
-            endpoint_method_name=endpoint_method_name,
             categories=["positive", "negative"] + (["neutral"] if include_neutral else []),
+            prompter=SentimentAnalysisPrompter(include_neutral=include_neutral),
+            api_key=api_key,
             lowercase=True,
-            prompter=kwargs.pop("prompter", None) or SentimentAnalysisPrompter(include_neutral=include_neutral),
             **kwargs,
         )
 
 
-class AnthropicClassificationMixin:
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
+class AnthropicTextClassificationAdapter(AnthropicAdapterMixin, TextClassificationAdapter):
+    """Adapter for an Anthropic text classification model."""
 
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"prompt": request, "stop_sequences": ["\n\n"]}
+    def prepare_input_content(self, content) -> dict:
+        return {"prompt": content, "stop_sequences": ["\n\n"]}
 
 
-class AnthropicTextClassificationAdapter(AnthropicClassificationMixin, TextClassificationAdapter):
-    def __init__(self, categories: List[str], lowercase: bool = True, api_key: Optional[str] = None, **kwargs):
-        super().__init__(
-            client=AnthropicClient(api_key),
-            endpoint_method_name="complete",
-            categories=categories,
-            lowercase=lowercase,
-            **kwargs,
-        )
+class AnthropicSentimentAnalysisAdapter(AnthropicAdapterMixin, SentimentAnalysisAdapter):
+    """Adapter for an Anthropic sentiment analysis model."""
+
+    def prepare_input_content(self, content) -> dict:
+        return {"prompt": content, "stop_sequences": ["\n\n"]}
 
 
-class AnthropicSentimentAnalysisAdapter(AnthropicClassificationMixin, SentimentAnalysisAdapter):
-    def __init__(self, include_neutral: bool = True, api_key: Optional[str] = None, **kwargs):
-        super().__init__(
-            client=AnthropicClient(api_key),
-            endpoint_method_name="complete",
-            include_neutral=include_neutral,
-            **kwargs,
-        )
+class CohereTextClassificationAdapter(CohereAdapterMixin, TextClassificationAdapter):
+    """Adapter for a Cohere text classification model."""
 
 
-class CohereClassificationMixin:
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
-
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"prompt": request}
+class CohereSentimentAnalysisAdapter(CohereAdapterMixin, SentimentAnalysisAdapter):
+    """Adapter for a Cohere sentiment analysis model."""
 
 
-class CohereTextClassificationAdapter(CohereClassificationMixin, TextClassificationAdapter):
-    def __init__(
-        self,
-        categories: List[str],
-        lowercase: bool = True,
-        api_key: Optional[str] = None,
-        api_version: str = "2022-12-06",
-        **kwargs
-    ):
-        super().__init__(
-            client=CohereClient(api_key, api_version=api_version),
-            endpoint_method_name="complete",
-            categories=categories,
-            lowercase=lowercase,
-            **kwargs,
-        )
+class OpenAITextClassificationAdapter(OpenAIAdapterMixin, TextClassificationAdapter):
+    """Adapter for an OpenAI text classification model."""
 
 
-class CohereSentimentAnalysisAdapter(CohereClassificationMixin, SentimentAnalysisAdapter):
-    def __init__(
-        self, include_neutral: bool = True, api_key: Optional[str] = None, api_version: str = "2022-12-06", **kwargs
-    ):
-        super().__init__(
-            client=CohereClient(api_key, api_version=api_version),
-            endpoint_method_name="complete",
-            include_neutral=include_neutral,
-            **kwargs,
-        )
-
-
-class OpenAIClassificationMixin:
-    def postprocess_response(self, response: ClientResponse) -> ClientResponse:
-        if response.text is not None:
-            response.text = response.text.strip()
-        return response
-
-    def to_endpoint_kwargs(self, request) -> dict:
-        return {"messages": [{"role": "user", "content": request}]}
-
-
-class OpenAITextClassificationAdapter(OpenAIClassificationMixin, TextClassificationAdapter):
-    def __init__(self, categories: List[str], lowercase: bool = True, api_key: Optional[str] = None, **kwargs):
-        super().__init__(
-            client=OpenAIClient(api_key),
-            endpoint_method_name="chat",
-            categories=categories,
-            lowercase=lowercase,
-            **kwargs,
-        )
-
-
-class OpenAISentimentAnalysisAdapter(OpenAIClassificationMixin, SentimentAnalysisAdapter):
-    def __init__(self, include_neutral: bool = True, api_key: Optional[str] = None, **kwargs):
-        super().__init__(
-            client=OpenAIClient(api_key),
-            endpoint_method_name="chat",
-            include_neutral=include_neutral,
-            **kwargs,
-        )
+class OpenAISentimentAnalysisAdapter(OpenAIAdapterMixin, SentimentAnalysisAdapter):
+    """Adapter for an OpenAI sentiment analysis model."""
