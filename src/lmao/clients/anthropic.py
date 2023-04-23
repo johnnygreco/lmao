@@ -1,6 +1,6 @@
 from typing import NamedTuple, Optional
 
-from ..clients import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
+from ..clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
 from ..clients.schemas import AnthropicCompleteSchema
 
 __all__ = ["AnthropicClient", "AnthropicChatHistory"]

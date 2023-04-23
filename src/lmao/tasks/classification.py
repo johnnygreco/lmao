@@ -1,5 +1,5 @@
-from ..adapters import TextClassificationAdapter
-from ..clients import SUCCESS_STATUS_CODE
+from ..adapters.classification import TextClassificationAdapter
+from ..clients.base import SUCCESS_STATUS_CODE
 from .base import TaskResponse, task_errors
 
 __all__ = ["TextClassification"]

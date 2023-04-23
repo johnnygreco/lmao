@@ -1,6 +1,9 @@
 from typing import Optional
 
-from ..clients import AnthropicClient, ClientResponse, CohereClient, OpenAIClient
+from ..clients.anthropic import AnthropicClient
+from ..clients.base import ClientResponse
+from ..clients.cohere import CohereClient
+from ..clients.openai import OpenAIClient
 
 __all__ = ["AnthropicAdapterMixin", "CohereAdapterMixin", "OpenAIAdapterMixin"]
 

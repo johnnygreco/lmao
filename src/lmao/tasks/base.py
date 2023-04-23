@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import NamedTuple, Protocol, runtime_checkable
 
-from ..adapters import BaseAdapter
-from ..clients import ClientResponse
+from ..adapters.base import BaseAdapter
+from ..clients.base import ClientResponse
 
 __all__ = ["task_errors", "ModelTaskProtocol", "QATaskProtocol", "TaskResponse"]
 

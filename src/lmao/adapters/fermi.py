@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ..prompters import FermiProblemPrompter
+from ..prompters.fermi import FermiProblemPrompter
 from .base import BaseTaskAdapter
 from .client_mixins import AnthropicAdapterMixin, CohereAdapterMixin, OpenAIAdapterMixin
 

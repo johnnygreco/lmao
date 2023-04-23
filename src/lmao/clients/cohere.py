@@ -1,6 +1,6 @@
 from typing import NamedTuple, Optional
 
-from ..clients import SUCCESS_STATUS_CODE, BaseClient, ClientResponse
+from ..clients.base import SUCCESS_STATUS_CODE, BaseClient, ClientResponse
 from ..clients.schemas import CohereCompleteSchema
 
 __all__ = ["CohereClient"]

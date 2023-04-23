@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional
 
-from lmao.lm.clients import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
-from lmao.lm.schemas import OpenAIChatSchema, OpenAICompleteSchema
+from ..clients.base import SUCCESS_STATUS_CODE, BaseClient, ChatHistory, ClientResponse
+from ..clients.schemas import OpenAIChatSchema, OpenAICompleteSchema
 
 __all__ = ["OpenAIClient", "OpenAIChatHistory"]
 

@@ -1,5 +1,5 @@
-from ..adapters import BaseChatbotAdapter
-from ..clients import SUCCESS_STATUS_CODE, ClientResponse
+from ..adapters.chatbot import BaseChatbotAdapter
+from ..clients.base import SUCCESS_STATUS_CODE, ClientResponse
 
 __all__ = ["Chatbot"]
 

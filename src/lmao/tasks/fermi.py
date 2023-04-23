@@ -1,5 +1,5 @@
-from ..adapters import FermiProblemAdapter
-from ..clients import ClientResponse
+from ..adapters.fermi import FermiProblemAdapter
+from ..clients.base import ClientResponse
 
 __all__ = ["FermiProblem"]
 

@@ -1,6 +1,7 @@
 from typing import List, Optional
 
-from ..prompters import ClassificationPrompter, Prompter, SentimentAnalysisPrompter
+from ..prompters.base import Prompter
+from ..prompters.classification import ClassificationPrompter, SentimentAnalysisPrompter
 from .base import BaseTaskAdapter
 from .client_mixins import AnthropicAdapterMixin, CohereAdapterMixin, OpenAIAdapterMixin
 
