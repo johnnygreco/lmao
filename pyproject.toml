@@ -37,11 +37,11 @@ exclude = [
 "__init__.py" = ["F401"]
 
 [tool.ruff.isort]
-known-first-party = ["lmao"]
+known-first-party = ["lmfao"]
 
 [tool.semantic_release]
 branch = "main"
 version_variable = [
-    "src/lmao/__init__.py:__version__",
+    "src/lmfao/__init__.py:__version__",
     "setup.py:__version__"
 ]

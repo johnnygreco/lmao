@@ -1,26 +1,25 @@
-<img src="https://raw.githubusercontent.com/johnnygreco/lmao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 70px; margin-top: 20px" />
+<img src="https://raw.githubusercontent.com/johnnygreco/lmfao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 70px; margin-top: 20px" />
 
-# 🙊 LMAO
+# 🙊 lmfao
 > **L**anguage **M**odel **A**dapters and **O**rchestrators: A data scientist's toolkit for adapting LLMs to perform downstream NLP tasks 🦾
 
 <br>
 
-`lmao` is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/docs/introduction) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using few-shot learning with Claude or GPT-4. `lmao` is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
+`lmfao` is an open-source library for integrating large language models (LLMs) from providers like [OpenAI](https://platform.openai.com/docs/introduction) and [Anthropic](https://console.anthropic.com/docs/api) into your NLP workflows. For example, it can be used to pre-annotate text datasets using few-shot learning with Claude or GPT-4. `lmfao` is in the (very) early stages of development. New features will be added with high cadence and documentation is coming soon.
 
 ## Installation
 The package is available on PyPI and can be installed with pip:
 ```bash
-pip install lmao-nlp
+pip install lmfao
 ```
-> ⚠️ Don't forget the `-nlp` extension on the distribution name!
 
 ## Development
 
 To install the development version, clone the repository and install the package in editable mode with the `dev` extra:
 
 ```bash
-git clone https://github.com/johnnygreco/lmao.git
-cd lmao
+git clone https://github.com/johnnygreco/lmfao.git
+cd lmfao
 pip install -e ".[dev]"
 ```
 
@@ -37,13 +36,13 @@ The plan is to add support for all major LM providers (both for external API-bas
 - [Cohere](https://docs.cohere.ai/docs)
 - [Anthropic](https://console.anthropic.com/docs/api)
 
-You'll need an activate API key from one or more of these providers to use `lmao`.
+You'll need an activate API key from one or more of these providers to use `lmfao`.
 
 ## Quickstart
 
 ### 🤖 Create a ChatGPT chatbot
 ```python
-from lmao import factory
+from lmfao import factory
 
 # create a chatbot using OpenAI's ChatGPT under the hood
 chatbot = factory.create_chatbot("openai")
@@ -67,14 +66,14 @@ print(response.text)
 
 ### 😀 😐 😖 Perform sentiment analysis with Cohere
 ```python
-from lmao import factory
+from lmfao import factory
 
 # create a sentiment analysis task using an adapter
 # for Cohere's command-xlarge-nightly
 model = factory.create_task("sentiment_analysis", "cohere")
 
 # predict sentiment of the given text
-result = model.predict("This LMAO package is awesome!")
+result = model.predict("This lmfao package is awesome!")
 
 print(result.prediction)
 # output: 'positive'
@@ -82,7 +81,7 @@ print(result.prediction)
 
 ### 🪐 Solve Fermi Problems with Claude!
 ```python
-from lmao import factory
+from lmfao import factory
 
 # create a Fermi Task task using an adapter for Anthropic's Claude
 fermi = factory.create_task("fermi_problem", "anthropic")

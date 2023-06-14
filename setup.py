@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "0.1.0-beta.1"
+__version__ = "0.0.0"
 
 install_requires = [
     "pydantic>=1.10.7",
@@ -12,6 +12,7 @@ extras_require = {
     "dev": [
         "pre-commit>=3.2.1",
         "pytest>=7.2.2",
+        "python-semantic-release>=7.34.3",
         "responses>=0.23.1",
     ],
     "docs": [
@@ -24,16 +25,16 @@ extras_require = {
 extras_require["all"] = extras_require["dev"] + extras_require["docs"]
 
 setup(
-    name="lmao-nlp",
+    name="lmfao",
     version=__version__,
-    description="LMAO: Language Model Adapters and Orchestrators",
+    description="LMFAO: Language Model Functions, APIs, and Objects",
     author="Johnny Greco",
     packages=find_packages("src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
     install_requires=install_requires,
     extras_require=extras_require,
-    url="https://github.com/johnnygreco/lmao",
+    url="https://github.com/johnnygreco/lmfao",
     classifiers=[
         "Intended Audience :: Science/Research",
         "Programming Language :: Python :: 3",
