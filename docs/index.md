@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/johnnygreco/lmfao/main/assets/icon.png" height="140" width="105" align="right" style="margin-right: 70px; margin-top: 20px" />
 
 # 🙊 LMFAO
-> **L**anguage **M**odel **F**unctions and **A**PI **O**bjects <br> _A toolkit for adapting LLMs to perform downstream NLP tasks_ 🦾
+> **L**anguage **M**odels with **F**unctional **A**PIs and **O**bjects <br> _A toolkit for adapting LLMs to perform downstream NLP tasks_ 🦾
 
 <br>
 

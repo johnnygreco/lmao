@@ -27,7 +27,7 @@ extras_require["all"] = extras_require["dev"] + extras_require["docs"]
 setup(
     name="lmfao",
     version=__version__,
-    description="LMFAO: Language Model Functions and API Objects",
+    description="LMFAO: Language Models with Functional APIs and Objects",
     author="Johnny Greco",
     packages=find_packages("src"),
     package_dir={"": "src"},
