@@ -1,4 +1,4 @@
-site_name: lmfao
+site_name: lmao
 
 theme:
   name: material
@@ -8,7 +8,7 @@ theme:
   palette:
     primary: white
 
-repo_url: https://github.com/johnnygreco/lmfao
+repo_url: https://github.com/johnnygreco/lmao
 
 markdown_extensions:
   - pymdownx.highlight:
