@@ -9,9 +9,11 @@ docs:
 	cp README.md docs/index.md
 	python -m mkdocs serve
 
+
 deploy-docs:
 	cp README.md docs/index.md
 	python -m mkdocs gh-deploy
+
 
 prerelease: 
 	semantic-release --prerelease publish
