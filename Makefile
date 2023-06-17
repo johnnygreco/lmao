@@ -15,5 +15,5 @@ deploy-docs:
 	python -m mkdocs gh-deploy
 
 
-prerelease: 
-	semantic-release --prerelease publish
+release: 
+	semantic-release publish
